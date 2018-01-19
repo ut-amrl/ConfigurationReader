@@ -1,5 +1,8 @@
-testString = "LuaBridge works!"
-number = 42
+testFloat = 1/3
+testUint = 65
+testString = "Woah!"
+testDouble = 65.78
+testInt = -18
 
 --[[
 function DegToRad(n)

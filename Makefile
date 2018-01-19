@@ -1,9 +1,11 @@
 CXX = clang++
-FLAGS = -std=c++11
-OBJS = LuaScript.o ConfigInterface.o ConfigVar.o
+FLAGS = -std=c++11 -IConfigTypes/
+OBJS = LuaScript.o ConfigInterface.o ConfigInt.o ConfigUint.o ConfigDouble.o ConfigFloat.o ConfigString.o
 FORMAT = clang-format
 FFLAGS = -i --style=Google
-FFILES = reader.cpp LuaScript.cpp LuaScript.h ConfigInterface.h ConfigInterface.cpp ConfigVar.h ConfigVar.cpp
+FFILES = reader.cpp LuaScript.cpp LuaScript.h ConfigTypes/*.h ConfigTypes/*.cpp
+
+VPATH = ConfigTypes/
 
 .DEFAULT = all
 
@@ -18,11 +20,23 @@ luascript.o: LuaScript.cpp LuaScript.h
 configinterface.o: ConfigInterface.h ConfigInterface.cpp
 	$(CXX) $(FLAGS) -c ConfigInterface.cpp
 
-configvar.o: ConfigVar.h ConfigVar.cpp
-	$(CXX) $(FLAGS) -c ConfigVar.cpp
+configint.o: ConfigInt.h ConfigInt.cpp
+	$(CXX) $(FLAGS) -c ConfigInt.cpp
+
+configuint.o: ConfigUint.h ConfigUint.cpp
+	$(CXX) $(FLAGS) -c ConfigUint.cpp
+
+configdouble.o: ConfigDouble.h ConfigDouble.cpp
+	$(CXX) $(FLAGS) -c ConfigDouble.cpp
+
+configfloat.o: ConfigFloat.h ConfigFloat.cpp
+	$(CXX) $(FLAGS) -c ConfigFloat.cpp
+
+configstring.o: ConfigString.h ConfigString.cpp
+	$(CXX) $(FLAGS) -c ConfigString.cpp
 
 format:
 	$(FORMAT) $(FFLAGS) $(FFILES)
 
 clean:
-	rm reader LuaScript.o ConfigVar.o ConfigInterface.o
+	rm reader $(OBJS)

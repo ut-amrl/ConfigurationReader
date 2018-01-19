@@ -1,9 +1,13 @@
-// Copyright 2017 Ishan Khatri
+// Copyright 2018 Ishan Khatri
 #include <fstream>
+#include <memory>
+#include <unordered_map>
+#include "ConfigDouble.h"
+#include "ConfigFloat.h"
+#include "ConfigInt.h"
 #include "ConfigInterface.h"
-#include "ConfigVar.cpp"
-#include "ConfigVar.h"
-#include "LuaScript.h"
+#include "ConfigString.h"
+#include "ConfigUint.h"
 
 extern "C" {
 #include <sys/inotify.h>
@@ -11,43 +15,105 @@ extern "C" {
 }
 
 // Define constants
+#define FOLDER_PATH \
+  "/home/ishan/Share/ConfigurationReader/"  // Must be specified so that we can
+                                            // watch the directory for changes
 #define DEFAULT_FILENAME "config.lua"
-#define NUM_CONFIG_VARS 1
 #define EVENT_SIZE (sizeof(struct inotify_event))
 #define EVENT_BUF_LEN (1024 * (EVENT_SIZE + 16))
 
 using namespace std;
 
-vector<ConfigInterface*> flags;
+// vector<ConfigInterface*> flags;
+unordered_map<string, unique_ptr<ConfigInterface>> config;
 
 // Define macros for creating new config vars
-#define NEW_INT(key, subtree) \
-  flags.emplace_back(new ConfigVar<int>(key, subtree));
-#define NEW_UINT(key, subtree) \
-  flags.emplace_back(new ConfigVar<unsigned int>(key, subtree));
-#define NEW_DOUBLE(key, subtree) \
-  flags.emplace_back(new ConfigVar<double>(key, subtree));
-#define NEW_FLOAT(key, subtree) \
-  flags.emplace_back(new ConfigVar<float>(key, subtree));
-#define NEW_STRING(key, subtree) \
-  flags.emplace_back(new ConfigVar<string>(key, subtree));
+#define CFG_INT(key) \
+  config[key] = unique_ptr<ConfigInterface>(new ConfigInt(key))
+#define CFG_UINT(key) \
+  config[key] = unique_ptr<ConfigInterface>(new ConfigUint(key))
+#define CFG_DOUBLE(key) \
+  config[key] = unique_ptr<ConfigInterface>(new ConfigDouble(key))
+#define CFG_FLOAT(key) \
+  config[key] = unique_ptr<ConfigInterface>(new ConfigFloat(key))
+#define CFG_STRING(key) \
+  config[key] = unique_ptr<ConfigInterface>(new ConfigString(key))
 
+/*
+  The read() function takes in a filename as a parameter
+  and updates all the config values from the unordered map
+*/
 void read(string filename) {
+  // Create the LuaScript object
   LuaScript script(filename);
-  for (int x = 0; x < flags.size(); x++) {
-    string tname = (flags[x]->getSubtree() == "")
-                       ? flags[x]->getKey()
-                       : flags[x]->getKey() + "." + flags[x]->getSubtree();
-    string t = script.get<string>(tname);
-    flags[x]->setVal(&t);
-    string* p = (string*)flags[x]->getVal();
-    cout << flags[x]->getKey() << " was loaded with a value of " << *p << endl;
+  // Loop through the unordered map
+  unordered_map<string, unique_ptr<ConfigInterface>>::iterator itr;
+  for (itr = config.begin(); itr != config.end(); itr++) {
+    // Create a temporary pointer because you can't static_cast a unique_ptr
+    ConfigInterface* t = itr->second.get();
+    // Switch statement that serves as a runtime typecheck
+    // See the ConfigInterface.h file for documentation on the ConfigType enum &
+    // the getType() function
+    switch (itr->second->getType()) {
+      case (1):  // int
+      {
+        ConfigInt* temp = static_cast<ConfigInt*>(t);
+        temp->setVal(&script);
+        cout << temp->getKey() << " (int) was set to " << temp->getVal()
+             << endl;
+        break;
+      }
+      case (2):  // uint
+      {
+        ConfigUint* temp = static_cast<ConfigUint*>(t);
+        temp->setVal(&script);
+        cout << temp->getKey() << " (uint) was set to " << temp->getVal()
+             << endl;
+        break;
+      }
+      case (3):  // double
+      {
+        ConfigDouble* temp = static_cast<ConfigDouble*>(t);
+        temp->setVal(&script);
+        cout << temp->getKey() << " (double) was set to " << temp->getVal()
+             << endl;
+        break;
+      }
+      case (4):  // float
+      {
+        ConfigFloat* temp = static_cast<ConfigFloat*>(t);
+        temp->setVal(&script);
+        cout << temp->getKey() << " (float) was set to " << temp->getVal()
+             << endl;
+        break;
+      }
+      case (5):  // string
+      {
+        ConfigString* temp = static_cast<ConfigString*>(t);
+        temp->setVal(&script);
+        cout << temp->getKey() << " (string) was set to " << temp->getVal()
+             << endl;
+        break;
+      }
+      case (6):  // vector2f
+      {
+        cout << "Implementation TBD" << endl;
+        break;
+      }
+      case (0):  // null type: the type value used when a ConfigInterface is
+                 // constructed -> should never actually be used
+        cout << "This should never happen" << endl;
+        break;
+    }
   }
 }
 
 void init() {
-  // NEW_INT("number", "");
-  NEW_STRING("testString", "");
+  CFG_FLOAT("testFloat");
+  CFG_UINT("testUint");
+  CFG_INT("testInt");
+  CFG_STRING("testString");
+  CFG_DOUBLE("testDouble");
 }
 
 void helptext() {
@@ -72,7 +138,7 @@ int main(int argc, char* argv[]) {
     cout << "inotify error" << endl;
   }
 
-  string filePath = "/home/ishan/Share/ConfigurationReader/";
+  string filePath = FOLDER_PATH;
   string filename = "";
 
   if (argc > 2) {
