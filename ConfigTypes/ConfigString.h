@@ -8,7 +8,7 @@
 class ConfigString : public ConfigInterface {
  public:
   ConfigString(string key_name);
-  string getVal();
+  const string& getVal();
   bool setVal(LuaScript* script);
 
  protected:

@@ -9,7 +9,7 @@ class ConfigDouble : public ConfigInterface {
  public:
   ConfigDouble(string key_name);
   ConfigDouble(string key_name, double upper_bound, double lower_bound);
-  double getVal();
+  const double& getVal();
   bool setVal(LuaScript* script);
 
  protected:

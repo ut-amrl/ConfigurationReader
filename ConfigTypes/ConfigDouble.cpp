@@ -17,7 +17,10 @@ ConfigDouble::ConfigDouble(string key_name, double upper_bound,
   type = ConfigInterface::cdouble;
 }
 
-double ConfigDouble::getVal() { return val; }
+const double& ConfigDouble::getVal() { 
+  const double& d = val;
+  return d;
+}
 
 bool ConfigDouble::setVal(LuaScript* script) {
   double value = script->get<double>(key);

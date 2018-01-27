@@ -17,7 +17,10 @@ ConfigFloat::ConfigFloat(string key_name, float upper_bound,
   type = ConfigInterface::cfloat;
 }
 
-float ConfigFloat::getVal() { return val; }
+const float& ConfigFloat::getVal() { 
+  const float& f = val;
+  return f;
+}
 
 bool ConfigFloat::setVal(LuaScript* script) {
   float value = script->get<float>(key);

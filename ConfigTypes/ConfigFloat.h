@@ -9,7 +9,7 @@ class ConfigFloat : public ConfigInterface {
  public:
   ConfigFloat(string key_name);
   ConfigFloat(string key_name, float upper_bound, float lower_bound);
-  float getVal();
+  const float& getVal();
   bool setVal(LuaScript* script);
 
  protected:

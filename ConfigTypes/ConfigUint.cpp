@@ -17,7 +17,10 @@ ConfigUint::ConfigUint(string key_name, unsigned int upper_bound,
   type = ConfigInterface::cuint;
 }
 
-unsigned int ConfigUint::getVal() { return val; }
+const unsigned int& ConfigUint::getVal() { 
+  const unsigned int& u = val;
+  return u;
+}
 
 bool ConfigUint::setVal(LuaScript* script) {
   unsigned int value = script->get<unsigned int>(key);

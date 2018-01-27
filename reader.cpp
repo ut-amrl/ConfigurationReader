@@ -24,20 +24,23 @@ extern "C" {
 
 using namespace std;
 
-// vector<ConfigInterface*> flags;
 unordered_map<string, unique_ptr<ConfigInterface>> config;
+
+// Macros for expanding strings
+#define STR_EXPAND(tok) #tok
+#define STR(tok) STR_EXPAND(tok)
 
 // Define macros for creating new config vars
 #define CFG_INT(key) \
-  config[key] = unique_ptr<ConfigInterface>(new ConfigInt(key))
+  const int& CONFIG_##key = initInt(STR_EXPAND(key))
 #define CFG_UINT(key) \
-  config[key] = unique_ptr<ConfigInterface>(new ConfigUint(key))
+  const unsigned int& CONFIG_##key = initUint(STR_EXPAND(key))
 #define CFG_DOUBLE(key) \
-  config[key] = unique_ptr<ConfigInterface>(new ConfigDouble(key))
+  const double& CONFIG_##key = initDouble(STR_EXPAND(key))
 #define CFG_FLOAT(key) \
-  config[key] = unique_ptr<ConfigInterface>(new ConfigFloat(key))
+  const float& CONFIG_##key = initFloat(STR_EXPAND(key))
 #define CFG_STRING(key) \
-  config[key] = unique_ptr<ConfigInterface>(new ConfigString(key))
+  const string& CONFIG_##key = initStr(STR_EXPAND(key))
 
 /*
   The read() function takes in a filename as a parameter
@@ -108,12 +111,39 @@ void read(string filename) {
   }
 }
 
-void init() {
-  CFG_FLOAT("testFloat");
-  CFG_UINT("testUint");
-  CFG_INT("testInt");
-  CFG_STRING("testString");
-  CFG_DOUBLE("testDouble");
+const int& initInt(string key) {
+  config[key] = unique_ptr<ConfigInterface>(new ConfigInt(key));
+  ConfigInterface* t = config.find(key)->second.get();
+  ConfigInt* temp = static_cast<ConfigInt*>(t);
+  return temp->getVal();
+}
+
+const unsigned int& initUint(string key) {
+  config[key] = unique_ptr<ConfigInterface>(new ConfigUint(key));
+  ConfigInterface* t = config.find(key)->second.get();
+  ConfigUint* temp = static_cast<ConfigUint*>(t);
+  return temp->getVal();
+}
+
+const double& initDouble(string key) {
+  config[key] = unique_ptr<ConfigInterface>(new ConfigDouble(key));
+  ConfigInterface* t = config.find(key)->second.get();
+  ConfigDouble* temp = static_cast<ConfigDouble*>(t);
+  return temp->getVal();
+}
+
+const float& initFloat(string key) {
+  config[key] = unique_ptr<ConfigInterface>(new ConfigFloat(key));
+  ConfigInterface* t = config.find(key)->second.get();
+  ConfigFloat* temp = static_cast<ConfigFloat*>(t);
+  return temp->getVal();
+}
+
+const string& initStr(string key) {
+  config[key] = unique_ptr<ConfigInterface>(new ConfigString(key));
+  ConfigInterface* t = config.find(key)->second.get();
+  ConfigString* temp = static_cast<ConfigString*>(t);
+  return temp->getVal();
 }
 
 void helptext() {
@@ -150,12 +180,10 @@ int main(int argc, char* argv[]) {
       helptext();
       return 0;
     }
-    init();
     filePath += argv[1];
     filename += argv[1];
     read(filename);
   } else {
-    init();
     filePath += DEFAULT_FILENAME;
     filename = DEFAULT_FILENAME;
     read(filename);
