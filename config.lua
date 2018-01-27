@@ -4,6 +4,12 @@ testString = "Woah!!"
 testDouble = 65.78
 testInt = -18
 
+tree = {
+  stree = {
+    number = 42;
+  };
+};
+
 --[[
 function DegToRad(n)
   return math.rad(n)

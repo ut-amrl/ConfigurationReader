@@ -26,21 +26,17 @@ using namespace std;
 
 unordered_map<string, unique_ptr<ConfigInterface>> config;
 
-// Macros for expanding strings
-#define STR_EXPAND(tok) #tok
-#define STR(tok) STR_EXPAND(tok)
-
 // Define macros for creating new config vars
-#define CFG_INT(key) \
-  const int& CONFIG_##key = initInt(STR_EXPAND(key))
-#define CFG_UINT(key) \
-  const unsigned int& CONFIG_##key = initUint(STR_EXPAND(key))
-#define CFG_DOUBLE(key) \
-  const double& CONFIG_##key = initDouble(STR_EXPAND(key))
-#define CFG_FLOAT(key) \
-  const float& CONFIG_##key = initFloat(STR_EXPAND(key))
-#define CFG_STRING(key) \
-  const string& CONFIG_##key = initStr(STR_EXPAND(key))
+#define CFG_INT(name, key) \
+  const int& CONFIG_##name = initInt(key)
+#define CFG_UINT(name, key) \
+  const unsigned int& CONFIG_##name = initUint(key)
+#define CFG_DOUBLE(name, key) \
+  const double& CONFIG_##name = initDouble(key)
+#define CFG_FLOAT(name, key) \
+  const float& CONFIG_##name = initFloat(key)
+#define CFG_STRING(name, key) \
+  const string& CONFIG_##name = initStr(key)
 
 /*
   The read() function takes in a filename as a parameter
