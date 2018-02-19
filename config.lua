@@ -4,7 +4,13 @@ testString = "Woah!!"
 testDouble = 65.78
 testInt = -18
 
+function vec2(_x,_y)
+  return {x=_x,y=_y}
+end
+
 tree = {
+  --testVec = {2.44, 456.2};
+  testVec = vec2(0.15, 0.2);
   stree = {
     number = 42;
   };

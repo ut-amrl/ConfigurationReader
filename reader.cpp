@@ -8,6 +8,7 @@
 #include "ConfigInterface.h"
 #include "ConfigString.h"
 #include "ConfigUint.h"
+#include "ConfigVector2f.h"
 
 extern "C" {
 #include <sys/inotify.h>
@@ -37,6 +38,8 @@ unordered_map<string, unique_ptr<ConfigInterface>> config;
   const float& CONFIG_##name = initFloat(key)
 #define CFG_STRING(name, key) \
   const string& CONFIG_##name = initStr(key)
+#define CFG_VECTOR2F(name, key) \
+const Eigen::Vector2f& CONFIG_##name = initVector2f(key)
 
 /*
   The read() function takes in a filename as a parameter
@@ -96,7 +99,10 @@ void read(string filename) {
       }
       case (6):  // vector2f
       {
-        cout << "Implementation TBD" << endl;
+        ConfigVector2f* temp = static_cast<ConfigVector2f*>(t);
+        temp->setVal(&script);
+        cout << temp->getKey() << " (Vector2f) was set to " << temp->getVal()
+             << endl;
         break;
       }
       case (0):  // null type: the type value used when a ConfigInterface is
@@ -142,6 +148,13 @@ const string& initStr(string key) {
   return temp->getVal();
 }
 
+const Eigen::Vector2f& initVector2f(string key) {
+  config[key] = unique_ptr<ConfigInterface>(new ConfigVector2f(key));
+  ConfigInterface* t = config.find(key)->second.get();
+  ConfigVector2f* temp = static_cast<ConfigVector2f*>(t);
+  return temp->getVal();
+}
+
 void helptext() {
   cout << "Please pass in zero or one lua files as an "
           "argument to the program."
@@ -152,6 +165,7 @@ void helptext() {
   cout << "Usage: ./reader filename.lua" << endl;
 }
 
+CFG_VECTOR2F(test, "tree.testVec");
 int main(int argc, char* argv[]) {
   int length, wd, fd, i = 0;
   char buffer[EVENT_BUF_LEN];

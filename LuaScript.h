@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include<eigen3/Eigen/Dense>
 
 extern "C" {
 #include "lauxlib.h"
@@ -17,6 +18,7 @@ class LuaScript {
   ~LuaScript();
   void printError(const std::string& variableName, const std::string& reason);
   std::vector<int> getIntVector(const std::string& name);
+  Eigen::Vector2f getVector2f(const std::string& name);
   std::vector<std::string> getTableKeys(const std::string& name);
 
   inline void clean() {

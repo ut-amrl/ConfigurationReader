@@ -1,6 +1,6 @@
 CXX = clang++
 FLAGS = -std=c++11 -IConfigTypes/
-OBJS = LuaScript.o ConfigInterface.o ConfigInt.o ConfigUint.o ConfigDouble.o ConfigFloat.o ConfigString.o
+OBJS = LuaScript.o ConfigInterface.o ConfigInt.o ConfigUint.o ConfigDouble.o ConfigFloat.o ConfigString.o ConfigVector2f.o
 FORMAT = clang-format
 FFLAGS = -i --style=Google
 FFILES = reader.cpp LuaScript.cpp LuaScript.h ConfigTypes/*.h ConfigTypes/*.cpp
@@ -34,6 +34,9 @@ configfloat.o: ConfigFloat.h ConfigFloat.cpp
 
 configstring.o: ConfigString.h ConfigString.cpp
 	$(CXX) $(FLAGS) -c ConfigString.cpp
+
+configvector2f: ConfigVector2f.h ConfigVector2f.cpp
+	$(CXX) $(FLAGS) -c ConfigVector2f.cpp
 
 format:
 	$(FORMAT) $(FFLAGS) $(FFILES)
