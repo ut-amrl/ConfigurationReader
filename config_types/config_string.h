@@ -6,11 +6,11 @@
 class ConfigString : public ConfigInterface {
  public:
   ConfigString(string key_name);
-  const string& getVal();
-  bool setVal(LuaScript* script);
+  const string& GetVal();
+  bool SetVal(LuaScript* script);
 
  protected:
-  string val;
+  string val_;
 };
 
 #endif

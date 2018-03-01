@@ -23,19 +23,21 @@ extern "C" {
 #define EVENT_SIZE (sizeof(struct inotify_event))
 #define EVENT_BUF_LEN (1024 * (EVENT_SIZE + 16))
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::vector;
 
 unordered_map<string, unique_ptr<ConfigInterface>> config;
 
 // Define macros for creating new config vars
-#define CFG_INT(name, key) const int& CONFIG_##name = initInt(key)
-#define CFG_UINT(name, key) const unsigned int& CONFIG_##name = initUint(key)
-#define CFG_DOUBLE(name, key) const double& CONFIG_##name = initDouble(key)
-#define CFG_FLOAT(name, key) const float& CONFIG_##name = initFloat(key)
-#define CFG_STRING(name, key) const string& CONFIG_##name = initStr(key)
+#define CFG_INT(name, key) const int& CONFIG_##name = InitInt(key)
+#define CFG_UINT(name, key) const unsigned int& CONFIG_##name = InitUnsignedInt(key)
+#define CFG_DOUBLE(name, key) const double& CONFIG_##name = InitDouble(key)
+#define CFG_FLOAT(name, key) const float& CONFIG_##name = InitFloat(key)
+#define CFG_STRING(name, key) const string& CONFIG_##name = InitString(key)
 #define CFG_VECTOR2F(name, key) \
   \
-const Eigen::Vector2f& CONFIG_##name = initVector2f(key)
+const Eigen::Vector2f& CONFIG_##name = InitVector2f(key)
 
 /*
   The LuaRead() function takes in a filename as a parameter
@@ -51,53 +53,53 @@ void LuaRead(string filename) {
     ConfigInterface* t = itr->second.get();
     // Switch statement that serves as a runtime typecheck
     // See the ConfigInterface.h file for documentation on the ConfigType enum &
-    // the getType() function
-    switch (itr->second->getType()) {
+    // the GetType() function
+    switch (itr->second->GetType()) {
       case (1):  // int
       {
         ConfigInt* temp = static_cast<ConfigInt*>(t);
-        temp->setVal(&script);
-        cout << temp->getKey() << " (int) was set to " << temp->getVal()
+        temp->SetVal(&script);
+        cout << temp->GetKey() << " (int) was set to " << temp->GetVal()
              << endl;
         break;
       }
       case (2):  // uint
       {
         ConfigUint* temp = static_cast<ConfigUint*>(t);
-        temp->setVal(&script);
-        cout << temp->getKey() << " (uint) was set to " << temp->getVal()
+        temp->SetVal(&script);
+        cout << temp->GetKey() << " (uint) was set to " << temp->GetVal()
              << endl;
         break;
       }
       case (3):  // double
       {
         ConfigDouble* temp = static_cast<ConfigDouble*>(t);
-        temp->setVal(&script);
-        cout << temp->getKey() << " (double) was set to " << temp->getVal()
+        temp->SetVal(&script);
+        cout << temp->GetKey() << " (double) was set to " << temp->GetVal()
              << endl;
         break;
       }
       case (4):  // float
       {
         ConfigFloat* temp = static_cast<ConfigFloat*>(t);
-        temp->setVal(&script);
-        cout << temp->getKey() << " (float) was set to " << temp->getVal()
+        temp->SetVal(&script);
+        cout << temp->GetKey() << " (float) was set to " << temp->GetVal()
              << endl;
         break;
       }
       case (5):  // string
       {
         ConfigString* temp = static_cast<ConfigString*>(t);
-        temp->setVal(&script);
-        cout << temp->getKey() << " (string) was set to " << temp->getVal()
+        temp->SetVal(&script);
+        cout << temp->GetKey() << " (string) was set to " << temp->GetVal()
              << endl;
         break;
       }
       case (6):  // vector2f
       {
         ConfigVector2f* temp = static_cast<ConfigVector2f*>(t);
-        temp->setVal(&script);
-        cout << temp->getKey() << " (Vector2f) was set to " << temp->getVal()
+        temp->SetVal(&script);
+        cout << temp->GetKey() << " (Vector2f) was set to " << temp->GetVal()
              << endl;
         break;
       }
@@ -109,49 +111,49 @@ void LuaRead(string filename) {
   }
 }
 
-const int& initInt(string key) {
+const int& InitInt(string key) {
   config[key] = unique_ptr<ConfigInterface>(new ConfigInt(key));
   ConfigInterface* t = config.find(key)->second.get();
   ConfigInt* temp = static_cast<ConfigInt*>(t);
-  return temp->getVal();
+  return temp->GetVal();
 }
 
-const unsigned int& initUint(string key) {
+const unsigned int& InitUnsignedInt(string key) {
   config[key] = unique_ptr<ConfigInterface>(new ConfigUint(key));
   ConfigInterface* t = config.find(key)->second.get();
   ConfigUint* temp = static_cast<ConfigUint*>(t);
-  return temp->getVal();
+  return temp->GetVal();
 }
 
-const double& initDouble(string key) {
+const double& InitDouble(string key) {
   config[key] = unique_ptr<ConfigInterface>(new ConfigDouble(key));
   ConfigInterface* t = config.find(key)->second.get();
   ConfigDouble* temp = static_cast<ConfigDouble*>(t);
-  return temp->getVal();
+  return temp->GetVal();
 }
 
-const float& initFloat(string key) {
+const float& InitFloat(string key) {
   config[key] = unique_ptr<ConfigInterface>(new ConfigFloat(key));
   ConfigInterface* t = config.find(key)->second.get();
   ConfigFloat* temp = static_cast<ConfigFloat*>(t);
-  return temp->getVal();
+  return temp->GetVal();
 }
 
-const string& initStr(string key) {
+const string& InitString(string key) {
   config[key] = unique_ptr<ConfigInterface>(new ConfigString(key));
   ConfigInterface* t = config.find(key)->second.get();
   ConfigString* temp = static_cast<ConfigString*>(t);
-  return temp->getVal();
+  return temp->GetVal();
 }
 
-const Eigen::Vector2f& initVector2f(string key) {
+const Eigen::Vector2f& InitVector2f(string key) {
   config[key] = unique_ptr<ConfigInterface>(new ConfigVector2f(key));
   ConfigInterface* t = config.find(key)->second.get();
   ConfigVector2f* temp = static_cast<ConfigVector2f*>(t);
-  return temp->getVal();
+  return temp->GetVal();
 }
 
-void helptext() {
+void HelpText() {
   cout << "Please pass in zero or one lua files as an "
           "argument to the program."
        << endl;
@@ -179,11 +181,11 @@ int main(int argc, char* argv[]) {
 
   if (argc > 2) {
     cout << "Incorrect usage. ";
-    helptext();
+    HelpText();
   } else if (argc == 2) {
     string t = argv[1];
     if (t == "-h" || t == "-help" || t == "--help") {
-      helptext();
+      HelpText();
       return 0;
     }
     filePath += argv[1];
@@ -197,6 +199,24 @@ int main(int argc, char* argv[]) {
 
   wd = inotify_add_watch(fd, filePath.c_str(), IN_MODIFY);
 
+  // Loop forever, checking for changes to the files above
+  while(1){
+    i = 0;
+    length = read(fd, buffer, EVENT_BUF_LEN);
+    if (length < 0) cout << "ERROR: Inotify read failed" << endl;
+
+    while (i < length) {
+      struct inotify_event* event = (struct inotify_event*)&buffer[i];
+      if (event->mask & IN_MODIFY) {  // If the event was a modify event
+        cout << filename << " has been modified" << endl;
+        LuaRead(filename);
+        cout << "New value: " << CONFIG_test << endl;
+      }
+      i += EVENT_SIZE + event->len;
+    }
+  }
+
+/*
   length = read(fd, buffer, EVENT_BUF_LEN);
 
   if (length < 0) {
@@ -211,7 +231,7 @@ int main(int argc, char* argv[]) {
     }
     i += EVENT_SIZE + event->len;
   }
-
+*/
   inotify_rm_watch(fd, wd);
   close(fd);
 }

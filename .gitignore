@@ -1,6 +1,5 @@
-notes.md
 *.o
 reader
-ConfigReader
+class_reader
 /test
 .vscode

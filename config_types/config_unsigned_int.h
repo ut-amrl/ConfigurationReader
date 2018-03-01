@@ -8,13 +8,13 @@ class ConfigUint : public ConfigInterface {
   ConfigUint(string key_name);
   ConfigUint(string key_name, unsigned int upper_bound,
              unsigned int lower_bound);
-  const unsigned int& getVal();
-  bool setVal(LuaScript* script);
+  const unsigned int& GetVal();
+  bool SetVal(LuaScript* script);
 
  protected:
-  unsigned int u_bound;
-  unsigned int l_bound;
-  unsigned int val;
+  unsigned int upper_bound_;
+  unsigned int lower_bound_;
+  unsigned int val_;
 };
 
 #endif

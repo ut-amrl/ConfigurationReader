@@ -3,7 +3,7 @@
 
 ConfigReader::ConfigReader(vector<string> f) { files = f; }
 
-CFG_VECTOR2F(test, "tree.testVec");
+// CFG_VECTOR2F(test, "tree.testVec");
 
 void ConfigReader::LuaRead(string filename) {
   // Create the LuaScript object
@@ -14,54 +14,54 @@ void ConfigReader::LuaRead(string filename) {
     // Create a temporary pointer because you can't static_cast a unique_ptr
     ConfigInterface* t = itr->second.get();
     // Switch statement that serves as a runtime typecheck
-    // See the ConfigInterface.h file for documentation on the ConfigType enum &
-    // the getType() function
-    switch (itr->second->getType()) {
+    // See the config_interface.h file for documentation on the ConfigType enum &
+    // the GetType() function
+    switch (itr->second->GetType()) {
       case (1):  // int
       {
         ConfigInt* temp = static_cast<ConfigInt*>(t);
-        temp->setVal(&script);
-        cout << temp->getKey() << " (int) was set to " << temp->getVal()
+        temp->SetVal(&script);
+        cout << temp->GetKey() << " (int) was set to " << temp->GetVal()
              << endl;
         break;
       }
       case (2):  // uint
       {
         ConfigUint* temp = static_cast<ConfigUint*>(t);
-        temp->setVal(&script);
-        cout << temp->getKey() << " (uint) was set to " << temp->getVal()
+        temp->SetVal(&script);
+        cout << temp->GetKey() << " (uint) was set to " << temp->GetVal()
              << endl;
         break;
       }
       case (3):  // double
       {
         ConfigDouble* temp = static_cast<ConfigDouble*>(t);
-        temp->setVal(&script);
-        cout << temp->getKey() << " (double) was set to " << temp->getVal()
+        temp->SetVal(&script);
+        cout << temp->GetKey() << " (double) was set to " << temp->GetVal()
              << endl;
         break;
       }
       case (4):  // float
       {
         ConfigFloat* temp = static_cast<ConfigFloat*>(t);
-        temp->setVal(&script);
-        cout << temp->getKey() << " (float) was set to " << temp->getVal()
+        temp->SetVal(&script);
+        cout << temp->GetKey() << " (float) was set to " << temp->GetVal()
              << endl;
         break;
       }
       case (5):  // string
       {
         ConfigString* temp = static_cast<ConfigString*>(t);
-        temp->setVal(&script);
-        cout << temp->getKey() << " (string) was set to " << temp->getVal()
+        temp->SetVal(&script);
+        cout << temp->GetKey() << " (string) was set to " << temp->GetVal()
              << endl;
         break;
       }
       case (6):  // vector2f
       {
         ConfigVector2f* temp = static_cast<ConfigVector2f*>(t);
-        temp->setVal(&script);
-        cout << temp->getKey() << " (Vector2f) was set to " << temp->getVal()
+        temp->SetVal(&script);
+        cout << temp->GetKey() << " (Vector2f) was set to " << temp->GetVal()
              << endl;
         break;
       }
@@ -73,46 +73,46 @@ void ConfigReader::LuaRead(string filename) {
   }
 }
 
-const int& ConfigReader::initInt(string key) {
+const int& ConfigReader::InitInt(string key) {
   config[key] = unique_ptr<ConfigInterface>(new ConfigInt(key));
   ConfigInterface* t = config.find(key)->second.get();
   ConfigInt* temp = static_cast<ConfigInt*>(t);
-  return temp->getVal();
+  return temp->GetVal();
 }
 
-const unsigned int& ConfigReader::initUint(string key) {
+const unsigned int& ConfigReader::InitUnsignedInt(string key) {
   config[key] = unique_ptr<ConfigInterface>(new ConfigUint(key));
   ConfigInterface* t = config.find(key)->second.get();
   ConfigUint* temp = static_cast<ConfigUint*>(t);
-  return temp->getVal();
+  return temp->GetVal();
 }
 
-const double& ConfigReader::initDouble(string key) {
+const double& ConfigReader::InitDouble(string key) {
   config[key] = unique_ptr<ConfigInterface>(new ConfigDouble(key));
   ConfigInterface* t = config.find(key)->second.get();
   ConfigDouble* temp = static_cast<ConfigDouble*>(t);
-  return temp->getVal();
+  return temp->GetVal();
 }
 
-const float& ConfigReader::initFloat(string key) {
+const float& ConfigReader::InitFloat(string key) {
   config[key] = unique_ptr<ConfigInterface>(new ConfigFloat(key));
   ConfigInterface* t = config.find(key)->second.get();
   ConfigFloat* temp = static_cast<ConfigFloat*>(t);
-  return temp->getVal();
+  return temp->GetVal();
 }
 
-const string& ConfigReader::initStr(string key) {
+const string& ConfigReader::InitString(string key) {
   config[key] = unique_ptr<ConfigInterface>(new ConfigString(key));
   ConfigInterface* t = config.find(key)->second.get();
   ConfigString* temp = static_cast<ConfigString*>(t);
-  return temp->getVal();
+  return temp->GetVal();
 }
 
-const Eigen::Vector2f& ConfigReader::initVector2f(string key) {
+const Eigen::Vector2f& ConfigReader::InitVector2f(string key) {
   config[key] = unique_ptr<ConfigInterface>(new ConfigVector2f(key));
   ConfigInterface* t = config.find(key)->second.get();
   ConfigVector2f* temp = static_cast<ConfigVector2f*>(t);
-  return temp->getVal();
+  return temp->GetVal();
 }
 
 void ConfigReader::helptext() {
@@ -160,7 +160,7 @@ void ConfigReader::init() {
       }
     }
   }
-  /* Clean up*/
+  // Clean up
   inotify_rm_watch(fd, wd);
   close(fd);
 }

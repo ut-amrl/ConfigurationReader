@@ -26,22 +26,22 @@ using namespace std;
 #define LEN_NAME \
   16 /*Assuming that the length of the filename won't exceed 16 bytes*/
 #define EVENT_SIZE (sizeof(struct inotify_event)) /*size of one event*/
-#define BUF_LEN                                                        \
-  (MAX_EVENTS * (EVENT_SIZE + LEN_NAME)) /*buffer to store the data of \
+#define BUF_LEN                                                            \
+  (MAX_EVENTS * (EVENT_SIZE + LEN_NAME)) /*buffer to store the data of \ \ \
                                             events*/
 
 // Define macros for creating new config vars
-#define CFG_INT(name, key) const int& CONFIG_##name = ConfigReader::initInt(key)
+#define CFG_INT(name, key) const int& CONFIG_##name = ConfigReader::InitInt(key)
 #define CFG_UINT(name, key) \
-  const unsigned int& CONFIG_##name = ConfigReader::initUint(key)
+  const unsigned int& CONFIG_##name = ConfigReader::InitUnsignedInt(key)
 #define CFG_DOUBLE(name, key) \
-  const double& CONFIG_##name = ConfigReader::initDouble(key)
+  const double& CONFIG_##name = ConfigReader::InitDouble(key)
 #define CFG_FLOAT(name, key) \
-  const float& CONFIG_##name = ConfigReader::initFloat(key)
+  const float& CONFIG_##name = ConfigReader::InitFloat(key)
 #define CFG_STRING(name, key) \
-  const string& CONFIG_##name = ConfigReader::initStr(key)
+  const string& CONFIG_##name = ConfigReader::InitString(key)
 #define CFG_VECTOR2F(name, key) \
-  const Eigen::Vector2f& CONFIG_##name = ConfigReader::initVector2f(key)
+  const Eigen::Vector2f& CONFIG_##name = ConfigReader::InitVector2f(key)
 
 class ConfigReader {
  public:
@@ -53,12 +53,12 @@ class ConfigReader {
 
  protected:
   vector<string> files;
-  const int& initInt(string key);
-  const unsigned int& initUint(string key);
-  const double& initDouble(string key);
-  const float& initFloat(string key);
-  const string& initStr(string key);
-  const Eigen::Vector2f& initVector2f(string key);
+  const int& InitInt(string key);
+  const unsigned int& InitUnsignedInt(string key);
+  const double& InitDouble(string key);
+  const float& InitFloat(string key);
+  const string& InitString(string key);
+  const Eigen::Vector2f& InitVector2f(string key);
 };
 
 #endif

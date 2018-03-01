@@ -10,12 +10,12 @@ using namespace std;
 class ConfigInterface {
  public:
   enum ConfigType { cnull, cint, cuint, cdouble, cfloat, cstring, cvector2f };
-  string getKey();
-  virtual ConfigType getType();
+  string GetKey();
+  virtual ConfigType GetType();
 
  protected:
-  string key;
-  ConfigType type;
+  string key_;
+  ConfigType type_;
 };
 
 #endif

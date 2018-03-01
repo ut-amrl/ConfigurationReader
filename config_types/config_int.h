@@ -7,13 +7,13 @@ class ConfigInt : public ConfigInterface {
  public:
   ConfigInt(string key_name);
   ConfigInt(string key_name, int upper_bound, int lower_bound);
-  int& getVal();
-  bool setVal(LuaScript* script);
+  int& GetVal();
+  bool SetVal(LuaScript* script);
 
  protected:
-  int u_bound;
-  int l_bound;
-  int val;
+  int upper_bound_;
+  int lower_bound_;
+  int val_;
 };
 
 #endif

@@ -1,32 +1,33 @@
 #include "config_double.h"
 
 ConfigDouble::ConfigDouble(string key_name) {
-  key = key_name;
-  val = 0;
-  u_bound = 0;
-  l_bound = 0;
-  type = ConfigInterface::cdouble;
+  key_ = key_name;
+  val_ = 0;
+  upper_bound_ = 0;
+  lower_bound_ = 0;
+  type_ = ConfigInterface::cdouble;
 }
 
 ConfigDouble::ConfigDouble(string key_name, double upper_bound,
                            double lower_bound) {
-  key = key_name;
-  val = 0;
-  u_bound = upper_bound;
-  l_bound = lower_bound;
-  type = ConfigInterface::cdouble;
+  key_ = key_name;
+  val_ = 0;
+  upper_bound_ = upper_bound;
+  lower_bound_ = lower_bound;
+  type_ = ConfigInterface::cdouble;
 }
 
-const double& ConfigDouble::getVal() {
-  const double& d = val;
+const double& ConfigDouble::GetVal() {
+  const double& d = val_;
   return d;
 }
 
-bool ConfigDouble::setVal(LuaScript* script) {
-  double value = script->get<double>(key);
-  if (u_bound != 0 && l_bound != 0) {            // If the bounds exist
-    if (value <= l_bound && value >= u_bound) {  // Check the value against them
-      val = value;
+bool ConfigDouble::SetVal(LuaScript* script) {
+  double value = script->get<double>(key_);
+  if (upper_bound_ != 0 && lower_bound_ != 0) {  // If the bounds exist
+    if (value <= lower_bound_ &&
+        value >= upper_bound_) {  // Check the value against them
+      val_ = value;
       return true;
     } else {
       std::cout << "Value was not between (or equal to) the bounds. Blowing up."
@@ -34,7 +35,7 @@ bool ConfigDouble::setVal(LuaScript* script) {
       return false;
     }
   } else {  // There are no bounds, set the value
-    val = value;
+    val_ = value;
     return true;
   }
 }

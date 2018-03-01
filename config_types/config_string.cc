@@ -1,17 +1,17 @@
 #include "config_string.h"
 
 ConfigString::ConfigString(string key_name) {
-  key = key_name;
-  val = "";
-  type = ConfigInterface::cstring;
+  key_ = key_name;
+  val_ = "";
+  type_ = ConfigInterface::cstring;
 }
 
-const string& ConfigString::getVal() {
-  const string& s = val;
+const string& ConfigString::GetVal() {
+  const string& s = val_;
   return s;
 }
 
-bool ConfigString::setVal(LuaScript* script) {
-  val = script->get<string>(key);
+bool ConfigString::SetVal(LuaScript* script) {
+  val_ = script->get<string>(key_);
   return true;
 }
