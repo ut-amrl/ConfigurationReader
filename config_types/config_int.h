@@ -1,7 +1,7 @@
 #ifndef CONFIGREADER_CONFIGTYPES_CONFIGINT_H_
 #define CONFIGREADER_CONFIGTYPES_CONFIGINT_H_
 
-#include "ConfigInterface.h"
+#include "config_interface.h"
 
 class ConfigInt : public ConfigInterface {
  public:

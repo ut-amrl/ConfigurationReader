@@ -1,5 +1,5 @@
 // Copyright 2018 Ishan Khatri
-#include "ConfigReader.h"
+#include "config_reader.h"
 
 ConfigReader::ConfigReader(vector<string> f) { files = f; }
 

@@ -1,8 +1,8 @@
 // Example Main for using the Configuration Reader class
 // Copyright 2018 Ishan Khatri
 
-#include "ConfigReader.h"
-#include "ConfigReader.cpp"
+#include "config_reader.h"
+#include "config_reader.cc"
 
 using namespace std;
 

@@ -5,13 +5,13 @@
 #include <fstream>
 #include <memory>
 #include <unordered_map>
-#include "ConfigDouble.h"
-#include "ConfigFloat.h"
-#include "ConfigInt.h"
-#include "ConfigInterface.h"
-#include "ConfigString.h"
-#include "ConfigUint.h"
-#include "ConfigVector2f.h"
+#include "config_double.h"
+#include "config_float.h"
+#include "config_int.h"
+#include "config_interface.h"
+#include "config_string.h"
+#include "config_unsigned_int.h"
+#include "config_vector2f.h"
 
 extern "C" {
 #include <sys/inotify.h>

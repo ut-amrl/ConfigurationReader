@@ -1,51 +1,48 @@
 CXX = clang++
-FLAGS = -std=c++11 -IConfigTypes/
-OBJS = LuaScript.o ConfigInterface.o ConfigInt.o ConfigUint.o ConfigDouble.o ConfigFloat.o ConfigString.o ConfigVector2f.o #ConfigReader.o
+FLAGS = -std=c++11 -Iconfig_types/
+OBJS = lua_script.o config_interface.o config_int.o config_unsigned_int.o config_double.o config_float.o config_string.o config_vector2f.o
 FORMAT = clang-format
 FFLAGS = -i --style=Google
-FFILES = reader.cpp ConfigReader.h ConfigReader.cpp LuaScript.cpp LuaScript.h ConfigTypes/*.h ConfigTypes/*.cpp
+FFILES = reader.cc config_reader.h config_reader.cc lua_script.cc lua_script.h config_types/*.h config_types/*.cc
 
-VPATH = ConfigTypes/
+VPATH = config_types/
 
 .DEFAULT = all
 
-all: main
+all: main reader
 
-#reader: reader.cpp $(OBJS)
-#	$(CXX) $(FLAGS) $^ -o reader -L "../../lua-5.3.4/src/" -llua -ldl
+reader: reader.cc $(OBJS)
+	$(CXX) $(FLAGS) $^ -o reader -L "../../lua-5.3.4/src/" -llua -ldl
 
-main: main.cpp $(OBJS)
-	$(CXX) $(FLAGS) $^ -o ConfigReader -L "../../lua-5.3.4/src/" -llua -ldl
+main: main.cc $(OBJS)
+	$(CXX) $(FLAGS) $^ -o class_reader -L "../../lua-5.3.4/src/" -llua -ldl
 
-configreader.o: ConfigReader.h ConfigReader.cpp
-	$(CXX) $(FLAGS) -c ConfigReader.cpp
+lua_script.o: lua_script.h lua_script.cc
+	$(CXX) $(FLAGS) -c lua_script.cc
 
-luascript.o: LuaScript.cpp LuaScript.h
-	$(CXX) $(FLAGS) -c LuaScript.cpp
+config_interface.o: config_interface.h config_interface.cc
+	$(CXX) $(FLAGS) -c config_types/config_interface.cc
 
-configinterface.o: ConfigInterface.h ConfigInterface.cpp
-	$(CXX) $(FLAGS) -c ConfigInterface.cpp
+config_int.o: config_int.h config_int.cc
+	$(CXX) $(FLAGS) -c config_types/config_int.cc
 
-configint.o: ConfigInt.h ConfigInt.cpp
-	$(CXX) $(FLAGS) -c ConfigInt.cpp
+config_unsigned_int.o: config_unsigned_int.h config_unsigned_int.cc
+	$(CXX) $(FLAGS) -c config_types/config_unsigned_int.cc
 
-configuint.o: ConfigUint.h ConfigUint.cpp
-	$(CXX) $(FLAGS) -c ConfigUint.cpp
+config_double.o: config_double.h config_double.cc
+	$(CXX) $(FLAGS) -c config_types/config_double.cc
 
-configdouble.o: ConfigDouble.h ConfigDouble.cpp
-	$(CXX) $(FLAGS) -c ConfigDouble.cpp
+config_float.o: config_float.h config_float.cc
+	$(CXX) $(FLAGS) -c config_types/config_float.cc
 
-configfloat.o: ConfigFloat.h ConfigFloat.cpp
-	$(CXX) $(FLAGS) -c ConfigFloat.cpp
+config_string.o: config_string.h config_string.cc
+	$(CXX) $(FLAGS) -c config_types/config_string.cc
 
-configstring.o: ConfigString.h ConfigString.cpp
-	$(CXX) $(FLAGS) -c ConfigString.cpp
-
-configvector2f: ConfigVector2f.h ConfigVector2f.cpp
-	$(CXX) $(FLAGS) -c ConfigVector2f.cpp
+config_vector2f: config_vector2f.h config_vector2f.cc
+	$(CXX) $(FLAGS) -c config_types/config_vector2f.cc
 
 format:
 	$(FORMAT) $(FFLAGS) $(FFILES)
 
 clean:
-	rm reader ConfigReader $(OBJS)
+	rm reader class_reader $(OBJS)

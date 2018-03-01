@@ -1,4 +1,4 @@
-#include "ConfigInt.h"
+#include "config_int.h"
 
 ConfigInt::ConfigInt(string key_name) {
   key = key_name;
