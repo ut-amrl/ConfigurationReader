@@ -2,13 +2,13 @@
 
 ConfigVector2f::ConfigVector2f(string key_name) {
   key = key_name;
-  //val = "";
+  // val = "";
   type = ConfigInterface::cvector2f;
 }
 
-const Eigen::Vector2f& ConfigVector2f::getVal() { 
+const Eigen::Vector2f& ConfigVector2f::getVal() {
   const Eigen::Vector2f& v = val;
-  return v; 
+  return v;
 }
 
 bool ConfigVector2f::setVal(LuaScript* script) {

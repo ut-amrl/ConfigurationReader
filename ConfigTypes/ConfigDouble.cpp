@@ -17,7 +17,7 @@ ConfigDouble::ConfigDouble(string key_name, double upper_bound,
   type = ConfigInterface::cdouble;
 }
 
-const double& ConfigDouble::getVal() { 
+const double& ConfigDouble::getVal() {
   const double& d = val;
   return d;
 }

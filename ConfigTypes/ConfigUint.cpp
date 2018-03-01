@@ -17,7 +17,7 @@ ConfigUint::ConfigUint(string key_name, unsigned int upper_bound,
   type = ConfigInterface::cuint;
 }
 
-const unsigned int& ConfigUint::getVal() { 
+const unsigned int& ConfigUint::getVal() {
   const unsigned int& u = val;
   return u;
 }

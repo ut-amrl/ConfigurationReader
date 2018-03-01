@@ -17,7 +17,7 @@ ConfigFloat::ConfigFloat(string key_name, float upper_bound,
   type = ConfigInterface::cfloat;
 }
 
-const float& ConfigFloat::getVal() { 
+const float& ConfigFloat::getVal() {
   const float& f = val;
   return f;
 }

@@ -1,18 +1,24 @@
 CXX = clang++
 FLAGS = -std=c++11 -IConfigTypes/
-OBJS = LuaScript.o ConfigInterface.o ConfigInt.o ConfigUint.o ConfigDouble.o ConfigFloat.o ConfigString.o ConfigVector2f.o
+OBJS = LuaScript.o ConfigInterface.o ConfigInt.o ConfigUint.o ConfigDouble.o ConfigFloat.o ConfigString.o ConfigVector2f.o #ConfigReader.o
 FORMAT = clang-format
 FFLAGS = -i --style=Google
-FFILES = reader.cpp LuaScript.cpp LuaScript.h ConfigTypes/*.h ConfigTypes/*.cpp
+FFILES = reader.cpp ConfigReader.h ConfigReader.cpp LuaScript.cpp LuaScript.h ConfigTypes/*.h ConfigTypes/*.cpp
 
 VPATH = ConfigTypes/
 
 .DEFAULT = all
 
-all: reader
+all: main
 
-reader: reader.cpp $(OBJS)
-	$(CXX) $(FLAGS) $^ -o reader -L "../../lua-5.3.4/src/" -llua -ldl
+#reader: reader.cpp $(OBJS)
+#	$(CXX) $(FLAGS) $^ -o reader -L "../../lua-5.3.4/src/" -llua -ldl
+
+main: main.cpp $(OBJS)
+	$(CXX) $(FLAGS) $^ -o ConfigReader -L "../../lua-5.3.4/src/" -llua -ldl
+
+configreader.o: ConfigReader.h ConfigReader.cpp
+	$(CXX) $(FLAGS) -c ConfigReader.cpp
 
 luascript.o: LuaScript.cpp LuaScript.h
 	$(CXX) $(FLAGS) -c LuaScript.cpp
@@ -42,4 +48,4 @@ format:
 	$(FORMAT) $(FFLAGS) $(FFILES)
 
 clean:
-	rm reader $(OBJS)
+	rm reader ConfigReader $(OBJS)

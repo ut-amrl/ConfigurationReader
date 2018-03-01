@@ -1,8 +1,6 @@
-#ifndef CONFIGVECTOR2F_H
-#define CONFIGVECTOR2F_H
+#ifndef CONFIGREADER_CONFIGTYPES_CONFIGVECTOR2F_H_
+#define CONFIGREADER_CONFIGTYPES_CONFIGVECTOR2F_H_
 
-#include <iostream>
-#include "../LuaScript.h"
 #include "ConfigInterface.h"
 
 class ConfigVector2f : public ConfigInterface {

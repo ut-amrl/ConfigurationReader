@@ -6,9 +6,9 @@ ConfigString::ConfigString(string key_name) {
   type = ConfigInterface::cstring;
 }
 
-const string& ConfigString::getVal() { 
+const string& ConfigString::getVal() {
   const string& s = val;
-  return s; 
+  return s;
 }
 
 bool ConfigString::setVal(LuaScript* script) {

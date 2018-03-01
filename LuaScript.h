@@ -1,10 +1,10 @@
-#ifndef LUASCRIPT_H
-#define LUASCRIPT_H
+#ifndef CONFIGREADER_LUASCRIPT_H_
+#define CONFIGREADER_LUASCRIPT_H_
 
+#include <eigen3/Eigen/Dense>
 #include <iostream>
 #include <string>
 #include <vector>
-#include<eigen3/Eigen/Dense>
 
 extern "C" {
 #include "lauxlib.h"

@@ -1,8 +1,6 @@
-#ifndef CONFIGINT_H
-#define CONFIGINT_H
+#ifndef CONFIGREADER_CONFIGTYPES_CONFIGINT_H_
+#define CONFIGREADER_CONFIGTYPES_CONFIGINT_H_
 
-#include <iostream>
-#include "../LuaScript.h"
 #include "ConfigInterface.h"
 
 class ConfigInt : public ConfigInterface {

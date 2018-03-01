@@ -28,24 +28,20 @@ using namespace std;
 unordered_map<string, unique_ptr<ConfigInterface>> config;
 
 // Define macros for creating new config vars
-#define CFG_INT(name, key) \
-  const int& CONFIG_##name = initInt(key)
-#define CFG_UINT(name, key) \
-  const unsigned int& CONFIG_##name = initUint(key)
-#define CFG_DOUBLE(name, key) \
-  const double& CONFIG_##name = initDouble(key)
-#define CFG_FLOAT(name, key) \
-  const float& CONFIG_##name = initFloat(key)
-#define CFG_STRING(name, key) \
-  const string& CONFIG_##name = initStr(key)
+#define CFG_INT(name, key) const int& CONFIG_##name = initInt(key)
+#define CFG_UINT(name, key) const unsigned int& CONFIG_##name = initUint(key)
+#define CFG_DOUBLE(name, key) const double& CONFIG_##name = initDouble(key)
+#define CFG_FLOAT(name, key) const float& CONFIG_##name = initFloat(key)
+#define CFG_STRING(name, key) const string& CONFIG_##name = initStr(key)
 #define CFG_VECTOR2F(name, key) \
+  \
 const Eigen::Vector2f& CONFIG_##name = initVector2f(key)
 
 /*
-  The read() function takes in a filename as a parameter
+  The LuaRead() function takes in a filename as a parameter
   and updates all the config values from the unordered map
 */
-void read(string filename) {
+void LuaRead(string filename) {
   // Create the LuaScript object
   LuaScript script(filename);
   // Loop through the unordered map
@@ -192,11 +188,11 @@ int main(int argc, char* argv[]) {
     }
     filePath += argv[1];
     filename += argv[1];
-    read(filename);
+    LuaRead(filename);
   } else {
     filePath += DEFAULT_FILENAME;
     filename = DEFAULT_FILENAME;
-    read(filename);
+    LuaRead(filename);
   }
 
   wd = inotify_add_watch(fd, filePath.c_str(), IN_MODIFY);
@@ -211,7 +207,7 @@ int main(int argc, char* argv[]) {
     struct inotify_event* event = (struct inotify_event*)&buffer[i];
     if (event->mask & IN_MODIFY) {
       cout << filename << " has been modified" << endl;
-      read(filename);
+      LuaRead(filename);
     }
     i += EVENT_SIZE + event->len;
   }

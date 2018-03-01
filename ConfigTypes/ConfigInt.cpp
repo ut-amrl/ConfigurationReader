@@ -16,9 +16,9 @@ ConfigInt::ConfigInt(string key_name, int upper_bound, int lower_bound) {
   type = ConfigInterface::cint;
 }
 
-int& ConfigInt::getVal() { 
+int& ConfigInt::getVal() {
   int& i = val;
-  return i; 
+  return i;
 }
 
 bool ConfigInt::setVal(LuaScript* script) {

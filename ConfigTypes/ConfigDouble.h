@@ -1,8 +1,6 @@
-#ifndef CONFIGDOUBLE_H
-#define CONFIGDOUBLE_H
+#ifndef CONFIGREADER_CONFIGTYPES_CONFIGDOUBLE_H_
+#define CONFIGREADER_CONFIGTYPES_CONFIGDOUBLE_H_
 
-#include <iostream>
-#include "../LuaScript.h"
 #include "ConfigInterface.h"
 
 class ConfigDouble : public ConfigInterface {

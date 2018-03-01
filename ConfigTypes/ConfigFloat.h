@@ -1,8 +1,6 @@
-#ifndef CONFIGFLOAT_H
-#define CONFIGFLOAT_H
+#ifndef CONFIGREADER_CONFIGTYPES_CONFIGFLOAT_H_
+#define CONFIGREADER_CONFIGTYPES_CONFIGFLOAT_H_
 
-#include <iostream>
-#include "../LuaScript.h"
 #include "ConfigInterface.h"
 
 class ConfigFloat : public ConfigInterface {

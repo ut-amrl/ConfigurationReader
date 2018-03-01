@@ -60,29 +60,27 @@ std::vector<int> LuaScript::getIntVector(const std::string& name) {
   return v;
 }*/
 
-Eigen::Vector2f LuaScript::getVector2f(const std::string& name){
+Eigen::Vector2f LuaScript::getVector2f(const std::string& name) {
   Eigen::Vector2f v;
   Eigen::Vector2f v2;
   lua_gettostack(name.c_str());
   if (lua_isnil(L, -1)) {  // array is not found
-    std::cout<<"Vector2f not found in Lua file"<<std::endl;
+    std::cout << "Vector2f not found in Lua file" << std::endl;
     return v;
   }
   lua_pushnil(L);
   int i = 0;
-  while (lua_next(L, -2) && i<2) {
-    if(strncmp(lua_typename(L, lua_type(L, -2)), "string", 6)==0){
-      if(strncmp(lua_tostring(L, -2), "x", 1)==0){
-        v(0)=((float)lua_tonumber(L, -1));
-      }
-      else{
-        v(1)=((float)lua_tonumber(L, -1));
+  while (lua_next(L, -2) && i < 2) {
+    if (strncmp(lua_typename(L, lua_type(L, -2)), "string", 6) == 0) {
+      if (strncmp(lua_tostring(L, -2), "x", 1) == 0) {
+        v(0) = ((float)lua_tonumber(L, -1));
+      } else {
+        v(1) = ((float)lua_tonumber(L, -1));
       }
       lua_pop(L, 1);
       i++;
-    }
-    else{
-      std::cout<<"ERROR: Key is not a string."<<std::endl;
+    } else {
+      std::cout << "ERROR: Key is not a string." << std::endl;
     }
   }
   clean();
