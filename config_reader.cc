@@ -1,4 +1,20 @@
-// Copyright 2018 Ishan Khatri
+// Copyright 2018 ikhatri@umass.edu
+// College of Information and Computer Sciences,
+// University of Massachusetts Amherst
+//
+// This software is free: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License Version 3,
+// as published by the Free Software Foundation.
+//
+// This software is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// Version 3 in the file COPYING that came with this distribution.
+// If not, see <http://www.gnu.org/licenses/>.
+// ========================================================================
 #include "config_reader.h"
 
 ConfigReader::ConfigReader(vector<string> f) { files = f; }
@@ -14,7 +30,8 @@ void ConfigReader::LuaRead(string filename) {
     // Create a temporary pointer because you can't static_cast a unique_ptr
     ConfigInterface* t = itr->second.get();
     // Switch statement that serves as a runtime typecheck
-    // See the config_interface.h file for documentation on the ConfigType enum &
+    // See the config_interface.h file for documentation on the ConfigType enum
+    // &
     // the GetType() function
     switch (itr->second->GetType()) {
       case (1):  // int

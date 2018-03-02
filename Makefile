@@ -9,7 +9,7 @@ VPATH = config_types/
 
 .DEFAULT = all
 
-all: main reader
+all: reader #main
 
 reader: reader.cc $(OBJS)
 	$(CXX) $(FLAGS) $^ -o reader -L "../../lua-5.3.4/src/" -llua -ldl
