@@ -22,8 +22,8 @@
 #include <string>
 #include "../lua_script.h"
 
-namespace configuration_reader{
-namespace config_types{
+namespace configuration_reader {
+namespace config_types {
 
 class ConfigInterface {
  public:
@@ -35,6 +35,6 @@ class ConfigInterface {
   std::string key_;
   ConfigType type_;
 };
-} // namespace config_types
-} // namespace configuration_reader
+}  // namespace config_types
+}  // namespace configuration_reader
 #endif

@@ -1,6 +1,7 @@
 // Copyright 2018 ikhatri@umass.edu
 // College of Information and Computer Sciences,
 // University of Massachusetts Amherst
+// Based on source by Elias Daler
 //
 // This software is free: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License Version 3,

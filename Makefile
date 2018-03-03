@@ -1,21 +1,24 @@
 CXX = clang++
 FLAGS = -std=c++11 -Iconfig_types/
-OBJS = lua_script.o config_interface.o config_int.o config_unsigned_int.o config_double.o config_float.o config_string.o config_vector2f.o
+OBJS = lua_script.o config_interface.o config_int.o config_unsigned_int.o config_double.o config_float.o config_string.o config_vector2f.o reader.o
 FORMAT = clang-format
 FFLAGS = -i --style=Google
-FFILES = reader.cc config_reader.h config_reader.cc lua_script.cc lua_script.h config_types/*.h config_types/*.cc
+FFILES = reader.h reader.cc lua_script.cc lua_script.h config_types/*.h config_types/*.cc
 
 VPATH = config_types/
 
 .DEFAULT = all
 
-all: reader #main
+all: main
 
-reader: reader.cc $(OBJS)
-	$(CXX) $(FLAGS) $^ -o reader -L "../../lua-5.3.4/src/" -llua -ldl
+#reader: reader.cc $(OBJS)
+#	$(CXX) $(FLAGS) $^ -o reader -L "../../lua-5.3.4/src/" -llua -ldl -lpthread
 
 main: main.cc $(OBJS)
-	$(CXX) $(FLAGS) $^ -o class_reader -L "../../lua-5.3.4/src/" -llua -ldl
+	$(CXX) $(FLAGS) $^ -o reader -L "../../lua-5.3.4/src/" -llua -ldl -lpthread
+
+reader.o: reader.h reader.cc
+	$(CXX) $(FLAGS) -c reader.cc
 
 lua_script.o: lua_script.h lua_script.cc
 	$(CXX) $(FLAGS) -c lua_script.cc

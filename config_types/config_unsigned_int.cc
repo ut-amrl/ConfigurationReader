@@ -17,8 +17,8 @@
 // ========================================================================
 #include "config_unsigned_int.h"
 
-namespace configuration_reader{
-namespace config_types{
+namespace configuration_reader {
+namespace config_types {
 ConfigUint::ConfigUint(std::string key_name) {
   key_ = key_name;
   val_ = 0;
@@ -58,5 +58,5 @@ bool ConfigUint::SetVal(LuaScript* script) {
     return true;
   }
 }
-} // namespace config_types
-} // namespace configuration_reader
+}  // namespace config_types
+}  // namespace configuration_reader

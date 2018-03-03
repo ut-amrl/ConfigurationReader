@@ -17,8 +17,8 @@
 // ========================================================================
 #include "config_vector2f.h"
 
-namespace configuration_reader{
-namespace config_types{
+namespace configuration_reader {
+namespace config_types {
 ConfigVector2f::ConfigVector2f(std::string key_name) {
   key_ = key_name;
   type_ = ConfigInterface::cvector2f;
@@ -33,5 +33,5 @@ bool ConfigVector2f::SetVal(LuaScript* script) {
   val_ = script->getVector2f(key_);
   return true;
 }
-} // namespace config_types
-} // namespace configuration_reader
+}  // namespace config_types
+}  // namespace configuration_reader

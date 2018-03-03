@@ -20,8 +20,8 @@
 
 #include "config_interface.h"
 
-namespace configuration_reader{
-namespace config_types{
+namespace configuration_reader {
+namespace config_types {
 class ConfigFloat : public ConfigInterface {
  public:
   ConfigFloat(std::string key_name);
@@ -34,6 +34,6 @@ class ConfigFloat : public ConfigInterface {
   float lower_bound_;
   float val_;
 };
-} // namespace config_types
-} // namespace configuration_reader
+}  // namespace config_types
+}  // namespace configuration_reader
 #endif

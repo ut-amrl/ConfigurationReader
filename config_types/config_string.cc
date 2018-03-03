@@ -17,8 +17,8 @@
 // ========================================================================
 #include "config_string.h"
 
-namespace configuration_reader{
-namespace config_types{
+namespace configuration_reader {
+namespace config_types {
 ConfigString::ConfigString(std::string key_name) {
   key_ = key_name;
   val_ = "";
@@ -34,5 +34,5 @@ bool ConfigString::SetVal(LuaScript* script) {
   val_ = script->get<std::string>(key_);
   return true;
 }
-} // namsespace config_types
-} // namespace configuration_reader
+}  // namsespace config_types
+}  // namespace configuration_reader

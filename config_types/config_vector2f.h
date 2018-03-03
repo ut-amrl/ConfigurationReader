@@ -20,8 +20,8 @@
 
 #include "config_interface.h"
 
-namespace configuration_reader{
-namespace config_types{
+namespace configuration_reader {
+namespace config_types {
 class ConfigVector2f : public ConfigInterface {
  public:
   ConfigVector2f(std::string key_name);
@@ -31,6 +31,6 @@ class ConfigVector2f : public ConfigInterface {
  protected:
   Eigen::Vector2f val_;
 };
-} // namespace config_types
-} // namespace configuration_reader
+}  // namespace config_types
+}  // namespace configuration_reader
 #endif

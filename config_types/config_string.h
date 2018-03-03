@@ -20,8 +20,8 @@
 
 #include "config_interface.h"
 
-namespace configuration_reader{
-namespace config_types{
+namespace configuration_reader {
+namespace config_types {
 class ConfigString : public ConfigInterface {
  public:
   ConfigString(std::string key_name);
@@ -31,6 +31,6 @@ class ConfigString : public ConfigInterface {
  protected:
   std::string val_;
 };
-} // namespace config_types
-} // namespace configuration_reader
+}  // namespace config_types
+}  // namespace configuration_reader
 #endif

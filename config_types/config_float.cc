@@ -17,8 +17,8 @@
 // ========================================================================
 #include "config_float.h"
 
-namespace configuration_reader{
-namespace config_types{
+namespace configuration_reader {
+namespace config_types {
 ConfigFloat::ConfigFloat(std::string key_name) {
   key_ = key_name;
   val_ = 0;
@@ -58,5 +58,5 @@ bool ConfigFloat::SetVal(LuaScript* script) {
     return true;
   }
 }
-} // namespace config_types
-} // namespace configuration_reader
+}  // namespace config_types
+}  // namespace configuration_reader

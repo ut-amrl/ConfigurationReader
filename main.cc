@@ -15,17 +15,16 @@
 // Version 3 in the file COPYING that came with this distribution.
 // If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================
-#include "config_reader.h"
-#include "config_reader.cc"
-
-using namespace std;
+// Sample main
+#include <chrono> // For testing purposes only
+#include "reader.h"
 
 int main(int argc, char* argv[]){
-  vector<string> files;
+  std::vector<std::string> files;
   if (argc == 2) {
-    string t = argv[1];
+    std::string t = argv[1];
     if (t == "-h" || t == "-help" || t == "--help") {
-      ConfigReader::helptext();
+      configuration_reader::HelpText();
       return 0;
     }
     files.push_back(argv[1]);
@@ -34,10 +33,12 @@ int main(int argc, char* argv[]){
       files.push_back(argv[i]);
     }
   } else {
-    files.push_back(DEFAULT_FILENAME);
+    files.push_back(configuration_reader::kDefaultFileName);
   }
 
-  ConfigReader r(files);
-  r.init();
+  configuration_reader::CreateDaemon(files);
+  // Make the program wait for 2 minutes before returning
+  sleep(120);
+
   return 0;
 }
