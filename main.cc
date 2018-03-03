@@ -37,8 +37,7 @@ int main(int argc, char* argv[]){
   }
 
   configuration_reader::CreateDaemon(files);
-  // Make the program wait for 2 minutes before returning
-  sleep(120);
+  sleep(60);
 
   return 0;
 }

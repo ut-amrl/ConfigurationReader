@@ -32,7 +32,7 @@ extern "C" {
 
 class LuaScript {
  public:
-  LuaScript(const std::string& filename);
+  LuaScript(const std::vector<std::string>& files);
   ~LuaScript();
   void printError(const std::string& variableName, const std::string& reason);
   std::vector<int> getIntVector(const std::string& name);

@@ -32,7 +32,7 @@ const std::string kDefaultFileName = "config.lua";
   \
 const Eigen::Vector2f& CONFIG_##name = InitVector2f(key)
 
-void LuaRead(std::string filename);
+void LuaRead(std::vector<std::string> files);
 const int& InitInt(std::string key);
 const unsigned int& InitUnsignedInt(std::string key);
 const double& InitDouble(std::string key);

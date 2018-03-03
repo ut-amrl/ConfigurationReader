@@ -20,11 +20,13 @@
 #include <string.h>
 
 // Constructor
-LuaScript::LuaScript(const std::string& filename) {
+LuaScript::LuaScript(const std::vector<std::string>& files) {
   L = luaL_newstate();
-  if (luaL_loadfile(L, filename.c_str()) || lua_pcall(L, 0, 0, 0)) {
-    std::cout << "Error: failed to load (" << filename << ")" << std::endl;
-    L = 0;
+  for(std::string filename : files){
+    if (luaL_loadfile(L, filename.c_str()) || lua_pcall(L, 0, 0, 0)) {
+      std::cout << "Error: failed to load (" << filename << ")" << std::endl;
+      L = 0;
+    }
   }
 
   if (L) luaL_openlibs(L);

@@ -34,9 +34,10 @@ std::unordered_map<std::string, std::unique_ptr<config_types::ConfigInterface>>
   The LuaRead() function takes in a filename as a parameter
   and updates all the config values from the unordered map
 */
-void LuaRead(std::string filename) {
+//void LuaRead(std::string filename) {
+void LuaRead(std::vector<std::string> files){
   // Create the LuaScript object
-  LuaScript script(filename);
+  LuaScript script(files);
   // Loop through the unordered map
   std::unordered_map<std::string,
                      std::unique_ptr<config_types::ConfigInterface>>::iterator
@@ -181,9 +182,12 @@ void InitDaemon(std::vector<std::string> files) {
     std::cout << "ERROR: Couldn't initialize inotify" << std::endl;
   }
 
+  // Load in the files for the first time
+  LuaRead(files);
+
   // Add all the files to be watched
   for (std::string f : files) {
-    LuaRead(f);
+    //LuaRead(f);
     wd = inotify_add_watch(fd, f.c_str(), IN_MODIFY);
     if (wd == -1)
       std::cout << "ERROR: Couldn't add watch to the file: " << f << std::endl;
@@ -198,8 +202,7 @@ void InitDaemon(std::vector<std::string> files) {
     while (i < length) {
       struct inotify_event* event = (struct inotify_event*)&buffer[i];
       if (event->mask & IN_MODIFY) {  // If the event was a modify event
-        for(std::string f : files)
-          LuaRead(f);
+        LuaRead(files); // Reload all the files
       }
       i += EVENT_SIZE + event->len;
     }
@@ -216,6 +219,7 @@ void CreateDaemon(std::vector<std::string> files){
 }
 
 CFG_VECTOR2F(test, "tree.testVec");
+CFG_INT(someInt, "testInt2");
 
 }  // namespace Configuration Reader
 
