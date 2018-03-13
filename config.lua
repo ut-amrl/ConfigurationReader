@@ -10,7 +10,7 @@ end
 
 tree = {
   --testVec = {2.44, 456.2};
-  testVec = vec2(0.15, 0.2);
+  testVec = vec2(0.16, 0.2);
   stree = {
     number = 42;
   };

@@ -38,6 +38,7 @@ int main(int argc, char* argv[]){
 
   configuration_reader::CreateDaemon(files);
   sleep(60);
+  std::cout<<configuration_reader::CONFIG_test<<std::endl;
 
   return 0;
 }

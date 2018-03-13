@@ -43,5 +43,7 @@ void HelpText();
 void InitDaemon(std::vector<std::string> files);
 void CreateDaemon(std::vector<std::string> files);
 
+extern const Eigen::Vector2f& CONFIG_test;
+
 } // namespace configuration_reader
 #endif
