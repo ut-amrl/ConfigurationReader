@@ -21,7 +21,7 @@ namespace configuration_reader {
 // Define constants
 //#define FOLDER_PATH \
   "/home/ishan/Share/ConfigurationReader/"  // Must be specified so that we can
-                                            // watch the directory for changess
+// watch the directory for changess
 #define EVENT_SIZE (sizeof(struct inotify_event))
 #define EVENT_BUF_LEN (1024 * (EVENT_SIZE + 16))
 
@@ -34,8 +34,8 @@ std::unordered_map<std::string, std::unique_ptr<config_types::ConfigInterface>>
   The LuaRead() function takes in a filename as a parameter
   and updates all the config values from the unordered map
 */
-//void LuaRead(std::string filename) {
-void LuaRead(std::vector<std::string> files){
+// void LuaRead(std::string filename) {
+void LuaRead(std::vector<std::string> files) {
   // Create the LuaScript object
   LuaScript script(files);
   // Loop through the unordered map
@@ -187,7 +187,7 @@ void InitDaemon(std::vector<std::string> files) {
 
   // Add all the files to be watched
   for (std::string f : files) {
-    //LuaRead(f);
+    // LuaRead(f);
     wd = inotify_add_watch(fd, f.c_str(), IN_MODIFY);
     if (wd == -1)
       std::cout << "ERROR: Couldn't add watch to the file: " << f << std::endl;
@@ -202,7 +202,7 @@ void InitDaemon(std::vector<std::string> files) {
     while (i < length) {
       struct inotify_event* event = (struct inotify_event*)&buffer[i];
       if (event->mask & IN_MODIFY) {  // If the event was a modify event
-        LuaRead(files); // Reload all the files
+        LuaRead(files);               // Reload all the files
       }
       i += EVENT_SIZE + event->len;
     }
@@ -212,10 +212,9 @@ void InitDaemon(std::vector<std::string> files) {
   close(fd);
 }
 
-void CreateDaemon(std::vector<std::string> files){
+void CreateDaemon(std::vector<std::string> files) {
   std::thread daemon(InitDaemon, files);
-  if(daemon.joinable())
-    daemon.detach();
+  if (daemon.joinable()) daemon.detach();
 }
 
 CFG_VECTOR2F(test, "tree.testVec");

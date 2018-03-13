@@ -2,8 +2,8 @@
 #define READER_H_
 #include <fstream>
 #include <memory>
-#include <unordered_map>
 #include <thread>
+#include <unordered_map>
 #include "config_double.h"
 #include "config_float.h"
 #include "config_int.h"
@@ -17,7 +17,7 @@ extern "C" {
 #include <unistd.h>
 }
 
-namespace configuration_reader{
+namespace configuration_reader {
 // Define constants
 const std::string kDefaultFileName = "config.lua";
 
@@ -45,5 +45,5 @@ void CreateDaemon(std::vector<std::string> files);
 
 extern const Eigen::Vector2f& CONFIG_test;
 
-} // namespace configuration_reader
+}  // namespace configuration_reader
 #endif
