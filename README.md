@@ -12,5 +12,5 @@ For specification details, see the [Wiki](https://github.com/umass-amrl/Configur
 - [ ] Implement bounds
     - [ ] Update macros to use bounds
 - [x] Add the ability to read in configuration variables from multiple files
-- [ ] Fix the auto-update so that it works on multiple files
+- [x] Fix the auto-update so that it works on multiple files
 - [ ] Add checks to ensure that negative numbers aren't cast to `unsigned int` using a lua function
