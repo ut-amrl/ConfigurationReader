@@ -1,5 +1,3 @@
-*.o
-reader
-class_reader
-/test
+bin/
+obj/
 .vscode

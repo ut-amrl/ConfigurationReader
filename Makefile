@@ -1,51 +1,91 @@
-CXX = clang++
-FLAGS = -std=c++11 -Iconfig_types/
-OBJS = lua_script.o config_interface.o config_int.o config_unsigned_int.o config_double.o config_float.o config_string.o config_vector2f.o reader.o
-FORMAT = clang-format
-FFLAGS = -i --style=Google
-FFILES = reader.h reader.cc lua_script.cc lua_script.h config_types/*.h config_types/*.cc
+# Copyright 2018 ikhatri@umass.edu
+# College of Information and Computer Sciences,
+# University of Massachusetts Amherst
+# Based on a guide by Scott McPeak
+#
+# This software is free: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License Version 3,
+# as published by the Free Software Foundation.
+#
+# This software is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# Version 3 in the file COPYING that came with this distribution.
+# If not, see <http://www.gnu.org/licenses/>.
+# ========================================================================
 
-VPATH = config_types/
+# Reference http://scottmcpeak.com/autodepend/autodepend.html
 
-.DEFAULT = all
+#Compiler and Linker
+CC          := clang++
 
-all: main
+#The Target Binary Program
+TARGET      := reader
 
-#reader: reader.cc $(OBJS)
-#	$(CXX) $(FLAGS) $^ -o reader -L "../../lua-5.3.4/src/" -llua -ldl -lpthread
+#The Directories, Source, Includes, Objects, Binary and Resources
+SRCDIR      := ../ConfigurationReader
+INCDIR      := config_types
+BUILDDIR    := obj
+TARGETDIR   := bin
+# RESDIR      := res
+SRCEXT      := cc
+DEPEXT      := d
+OBJEXT      := o
 
-main: main.cc $(OBJS)
-	$(CXX) $(FLAGS) $^ -o reader -L "../../lua-5.3.4/src/" -llua -ldl -lpthread
+#Flags, Libraries and Includes
+CFLAGS      := -std=c++11
+LIB         := -llua -ldl -lpthread
+INC         := -I$(INCDIR) -I/usr/local/include
+INCDEP      := -I$(INCDIR)
 
-reader.o: reader.h reader.cc
-	$(CXX) $(FLAGS) -c reader.cc
+#---------------------------------------------------------------------------------
+#DO NOT EDIT BELOW THIS LINE
+#---------------------------------------------------------------------------------
+SOURCES     := $(shell find $(SRCDIR) -type f -name '*.$(SRCEXT)')
+OBJECTS     := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEXT)))
 
-lua_script.o: lua_script.h lua_script.cc
-	$(CXX) $(FLAGS) -c lua_script.cc
+#Defauilt Make
+all: resources $(TARGET)
 
-config_interface.o: config_interface.h config_interface.cc
-	$(CXX) $(FLAGS) -c config_types/config_interface.cc
+#Remake
+remake: cleaner all
 
-config_int.o: config_int.h config_int.cc
-	$(CXX) $(FLAGS) -c config_types/config_int.cc
+#Copy Resources from Resources Directory to Target Directory
+resources: directories
+	# @cp $(RESDIR)/* $(TARGETDIR)/
 
-config_unsigned_int.o: config_unsigned_int.h config_unsigned_int.cc
-	$(CXX) $(FLAGS) -c config_types/config_unsigned_int.cc
+#Make the Directories
+directories:
+	@mkdir -p $(TARGETDIR)
+	@mkdir -p $(BUILDDIR)
 
-config_double.o: config_double.h config_double.cc
-	$(CXX) $(FLAGS) -c config_types/config_double.cc
-
-config_float.o: config_float.h config_float.cc
-	$(CXX) $(FLAGS) -c config_types/config_float.cc
-
-config_string.o: config_string.h config_string.cc
-	$(CXX) $(FLAGS) -c config_types/config_string.cc
-
-config_vector2f: config_vector2f.h config_vector2f.cc
-	$(CXX) $(FLAGS) -c config_types/config_vector2f.cc
-
-format:
-	$(FORMAT) $(FFLAGS) $(FFILES)
-
+#Clean only Objecst
 clean:
-	rm reader class_reader $(OBJS)
+	@$(RM) -rf $(BUILDDIR)
+
+#Full Clean, Objects and Binaries
+cleaner: clean
+	@$(RM) -rf $(TARGETDIR)
+
+#Pull in dependency info for *existing* .o files
+-include $(OBJECTS:.$(OBJEXT)=.$(DEPEXT))
+
+#Link
+$(TARGET): $(OBJECTS)
+	$(CC) -o $(TARGETDIR)/$(TARGET) $^ $(LIB)
+
+#Compile
+$(BUILDDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	@$(CC) $(CFLAGS) $(INCDEP) -MM $(SRCDIR)/$*.$(SRCEXT) > $(BUILDDIR)/$*.$(DEPEXT)
+	@cp -f $(BUILDDIR)/$*.$(DEPEXT) $(BUILDDIR)/$*.$(DEPEXT).tmp
+	@sed -e 's|.*:|$(BUILDDIR)/$*.$(OBJEXT):|' < $(BUILDDIR)/$*.$(DEPEXT).tmp > $(BUILDDIR)/$*.$(DEPEXT)
+	@sed -e 's/.*://' -e 's/\\$$//' < $(BUILDDIR)/$*.$(DEPEXT).tmp | fmt -1 | sed -e 's/^ *//' -e 's/$$/:/' >> $(BUILDDIR)/$*.$(DEPEXT)
+	@rm -f $(BUILDDIR)/$*.$(DEPEXT).tmp
+
+#Non-File Targets
+.PHONY: all remake clean cleaner resources
