@@ -26,7 +26,7 @@ class ConfigInt : public ConfigInterface {
  public:
   ConfigInt(std::string key_name);
   ConfigInt(std::string key_name, int upper_bound, int lower_bound);
-  int& GetVal();
+  const int& GetVal();
   bool SetVal(LuaScript* script);
 
  protected:

@@ -35,7 +35,7 @@ ConfigInt::ConfigInt(std::string key_name, int upper_bound, int lower_bound) {
   type_ = ConfigInterface::cint;
 }
 
-int& ConfigInt::GetVal() {
+const int& ConfigInt::GetVal() {
   int& i = val_;
   return i;
 }

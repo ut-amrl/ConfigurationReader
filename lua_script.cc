@@ -22,9 +22,11 @@
 // Constructor
 LuaScript::LuaScript(const std::vector<std::string>& files) {
   L = luaL_newstate();
+  luaL_openlibs(L);
   for (std::string filename : files) {
     if (luaL_loadfile(L, filename.c_str()) || lua_pcall(L, 0, 0, 0)) {
       std::cout << "Error: failed to load (" << filename << ")" << std::endl;
+      std::cout << "Error Message: " << lua_tostring(L, -1) << std::endl;
       L = 0;
     }
   }

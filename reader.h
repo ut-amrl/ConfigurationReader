@@ -29,6 +29,7 @@
 #include "config_string.h"
 #include "config_unsigned_int.h"
 #include "config_vector2f.h"
+#include "config_bool.h"
 
 extern "C" {
 #include <sys/inotify.h>
@@ -49,6 +50,8 @@ const std::string kDefaultFileName = "config.lua";
 #define CFG_VECTOR2F(name, key) \
   \
 const Eigen::Vector2f& CONFIG_##name = InitVector2f(key)
+#define CFG_BOOL(name, key) \
+  const bool& CONFIG_##name = configuration_reader::InitBool(key)
 
 void LuaRead(std::vector<std::string> files);
 const int& InitInt(std::string key);

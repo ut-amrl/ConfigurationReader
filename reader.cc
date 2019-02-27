@@ -103,6 +103,15 @@ void LuaRead(std::vector<std::string> files) {
                   << temp->GetVal() << std::endl;
         break;
       }
+      case (7):  // bool
+      {
+        config_types::ConfigBool* temp =
+            static_cast<config_types::ConfigBool*>(t);
+        temp->SetVal(&script);
+        std::cout << temp->GetKey() << " (boolean) was set to "
+                  << temp->GetVal() << std::endl;
+        break;
+      }
       case (0):  // null type: the type value used when a ConfigInterface is
                  // constructed -> should never actually be used
         std::cout << "This should never happen" << std::endl;
