@@ -15,22 +15,23 @@
 // Version 3 in the file COPYING that came with this distribution.
 // If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================
-#ifndef CONFIGREADER_CONFIGTYPES_CONFIGBOOL_H_
-#define CONFIGREADER_CONFIGTYPES_CONFIGBOOL_H_
-
-#include "config_interface.h"
+#include "config_vector3d.h"
 
 namespace configuration_reader {
 namespace config_types {
-class ConfigBool : public ConfigInterface {
- public:
-  explicit ConfigBool(std::string key_name);
-  const bool& GetVal();
-  bool SetVal(LuaScript* script);
+ConfigVector3d::ConfigVector3d(std::string key_name) {
+  key_ = key_name;
+  type_ = ConfigInterface::cvector3d;
+}
 
- protected:
-  bool val_;
-};
+const Eigen::Vector3d& ConfigVector3d::GetVal() {
+  const Eigen::Vector3d& v = val_;
+  return v;
+}
+
+bool ConfigVector3d::SetVal(LuaScript* script) {
+  val_ = script->getVector3d(key_);
+  return true;
+}
 }  // namespace config_types
 }  // namespace configuration_reader
-#endif

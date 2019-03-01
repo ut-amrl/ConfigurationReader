@@ -27,7 +27,7 @@ namespace config_types {
 
 class ConfigInterface {
  public:
-  enum ConfigType { cnull, cint, cuint, cdouble, cfloat, cstring, cvector2f, cbool };
+  enum ConfigType { cnull, cint, cuint, cdouble, cfloat, cstring, cvector2f, cbool, cvector2d, cvector3d };
   std::string GetKey();
   virtual ConfigType GetType();
 

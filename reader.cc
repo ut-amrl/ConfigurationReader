@@ -112,6 +112,24 @@ void LuaRead(std::vector<std::string> files) {
                   << temp->GetVal() << std::endl;
         break;
       }
+      case (8):  // vector2d
+      {
+        config_types::ConfigVector2d* temp =
+            static_cast<config_types::ConfigVector2d*>(t);
+        temp->SetVal(&script);
+        std::cout << temp->GetKey() << " (Vector2d) was set to "
+                  << temp->GetVal() << std::endl;
+        break;
+      }
+      case (9):  // vector3d
+      {
+        config_types::ConfigVector3d* temp =
+            static_cast<config_types::ConfigVector3d*>(t);
+        temp->SetVal(&script);
+        std::cout << temp->GetKey() << " (Vector3d) was set to "
+                  << temp->GetVal() << std::endl;
+        break;
+      }
       case (0):  // null type: the type value used when a ConfigInterface is
                  // constructed -> should never actually be used
         std::cout << "This should never happen" << std::endl;
@@ -171,6 +189,32 @@ const Eigen::Vector2f& InitVector2f(std::string key) {
   return temp->GetVal();
 }
 
+const bool& InitBool(std::string key) {
+  config[key] = std::unique_ptr<config_types::ConfigInterface>(
+      new config_types::ConfigBool(key));
+  config_types::ConfigInterface* t = config.find(key)->second.get();
+  config_types::ConfigBool* temp = static_cast<config_types::ConfigBool*>(t);
+  return temp->GetVal();
+}
+
+const Eigen::Vector2d& InitVector2d(std::string key) {
+  config[key] = std::unique_ptr<config_types::ConfigInterface>(
+      new config_types::ConfigVector2d(key));
+  config_types::ConfigInterface* t = config.find(key)->second.get();
+  config_types::ConfigVector2d* temp =
+      static_cast<config_types::ConfigVector2d*>(t);
+  return temp->GetVal();
+}
+
+const Eigen::Vector3d& InitVector3d(std::string key) {
+  config[key] = std::unique_ptr<config_types::ConfigInterface>(
+      new config_types::ConfigVector3d(key));
+  config_types::ConfigInterface* t = config.find(key)->second.get();
+  config_types::ConfigVector3d* temp =
+      static_cast<config_types::ConfigVector3d*>(t);
+  return temp->GetVal();
+}
+
 void HelpText() {
   std::cout << "Please pass in zero or more lua files as an "
                "argument to the program."
@@ -226,7 +270,7 @@ void CreateDaemon(std::vector<std::string> files) {
   if (daemon.joinable()) daemon.detach();
 }
 
-CFG_VECTOR2F(test, "tree.testVec");
+CFG_VECTOR3D(test, "tree.testVec");
 CFG_INT(someInt, "testInt2");
 
 }  // namespace Configuration Reader

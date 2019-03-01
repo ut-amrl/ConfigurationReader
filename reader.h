@@ -30,6 +30,8 @@
 #include "config_unsigned_int.h"
 #include "config_vector2f.h"
 #include "config_bool.h"
+#include "config_vector2d.h"
+#include "config_vector3d.h"
 
 extern "C" {
 #include <sys/inotify.h>
@@ -51,7 +53,10 @@ const std::string kDefaultFileName = "config.lua";
   \
 const Eigen::Vector2f& CONFIG_##name = InitVector2f(key)
 #define CFG_BOOL(name, key) \
-  const bool& CONFIG_##name = configuration_reader::InitBool(key)
+  const bool& CONFIG_##name = InitBool(key)
+
+#define CFG_VECTOR2D(name, key) const Eigen::Vector2d& CONFIG_##name = InitVector2d(key)
+#define CFG_VECTOR3D(name, key) const Eigen::Vector3d& CONFIG_##name = InitVector3d(key)
 
 void LuaRead(std::vector<std::string> files);
 const int& InitInt(std::string key);
@@ -64,7 +69,7 @@ void HelpText();
 void InitDaemon(std::vector<std::string> files);
 void CreateDaemon(std::vector<std::string> files);
 
-extern const Eigen::Vector2f& CONFIG_test;
+extern const Eigen::Vector3d& CONFIG_test;
 
 }  // namespace configuration_reader
 #endif

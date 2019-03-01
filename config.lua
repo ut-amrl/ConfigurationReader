@@ -8,9 +8,13 @@ function vec2(_x,_y)
   return {x=_x,y=_y}
 end
 
+function vec3(_x,_y,_z)
+  return {x=_x,y=_y,z=_z}
+end
+
 tree = {
   --testVec = {2.44, 456.2};
-  testVec = vec2(0.16, 0.2);
+  testVec = vec3(0.16, 0.2, 12.2);
   stree = {
     number = 42;
   };

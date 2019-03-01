@@ -37,6 +37,8 @@ class LuaScript {
   void printError(const std::string& variableName, const std::string& reason);
   std::vector<int> getIntVector(const std::string& name);
   Eigen::Vector2f getVector2f(const std::string& name);
+  Eigen::Vector2d getVector2d(const std::string& name);
+  Eigen::Vector3d getVector3d(const std::string& name);
   std::vector<std::string> getTableKeys(const std::string& name);
 
   inline void clean() {
