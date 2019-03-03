@@ -5,3 +5,4 @@ cd lua-5.3.4
 sudo apt-get install libreadline-dev
 make linux test
 sudo make linux install
+rm lua-5.3.4.tar.gz
