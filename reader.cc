@@ -270,7 +270,7 @@ void CreateDaemon(std::vector<std::string> files) {
   if (daemon.joinable()) daemon.detach();
 }
 
-CFG_VECTOR3D(test, "tree.testVec");
-CFG_INT(someInt, "testInt2");
+// CFG_VECTOR3D(test, "tree.testVec");
+// CFG_INT(someInt, "testInt2");
 
 }  // namespace Configuration Reader

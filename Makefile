@@ -48,7 +48,12 @@ SOURCES     := $(shell find $(SRCDIR) -type f -name '*.$(SRCEXT)')
 OBJECTS     := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEXT)))
 
 #Defauilt Make
-all: resources $(TARGET)
+all: resources main $(TARGET)
+
+print-%  : ; @echo $* = $($*)
+
+main: main.cpp
+	$(CC) $(CFLAGS) $(INC) -c -o obj/main.o ../ConfigurationReader/main.cpp
 
 #Remake
 remake: cleaner all
@@ -75,7 +80,7 @@ cleaner: clean
 
 #Link
 $(TARGET): $(OBJECTS)
-	$(CC) -o $(TARGETDIR)/$(TARGET) $^ $(LIB)
+	$(CC) -o $(TARGETDIR)/$(TARGET) $^ obj/main.o $(LIB)
 
 #Compile
 $(BUILDDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)

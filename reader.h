@@ -64,12 +64,16 @@ const unsigned int& InitUnsignedInt(std::string key);
 const double& InitDouble(std::string key);
 const float& InitFloat(std::string key);
 const std::string& InitString(std::string key);
+const bool& InitBool(std::string key);
 const Eigen::Vector2f& InitVector2f(std::string key);
+const Eigen::Vector2d& InitVector2d(std::string key);
+const Eigen::Vector3d& InitVector3d(std::string key);
 void HelpText();
 void InitDaemon(std::vector<std::string> files);
 void CreateDaemon(std::vector<std::string> files);
 
-extern const Eigen::Vector3d& CONFIG_test;
+// extern const Eigen::Vector3d& CONFIG_test;
+// extern const int& CONFIG_someInt;
 
 }  // namespace configuration_reader
 #endif
