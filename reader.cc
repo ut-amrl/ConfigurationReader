@@ -19,11 +19,12 @@
 
 namespace configuration_reader {
 // Define constants
-//#define FOLDER_PATH \
-  "/home/ishan/Share/ConfigurationReader/"  // Must be specified so that we can
-// watch the directory for changess
 #define EVENT_SIZE (sizeof(struct inotify_event))
 #define EVENT_BUF_LEN (1024 * (EVENT_SIZE + 16))
+
+// Atomic bool for the thread
+std::atomic_bool is_running_;
+std::thread daemon_;
 
 namespace {
 std::unordered_map<std::string, std::unique_ptr<config_types::ConfigInterface>>
@@ -39,16 +40,13 @@ void LuaRead(std::vector<std::string> files) {
   // Create the LuaScript object
   LuaScript script(files);
   // Loop through the unordered map
-  std::unordered_map<std::string,
-                     std::unique_ptr<config_types::ConfigInterface>>::iterator
-      itr;
-  for (itr = config.begin(); itr != config.end(); itr++) {
+  for (const auto& pair : config) {
     // Create a temporary pointer because you can't static_cast a unique_ptr
-    config_types::ConfigInterface* t = itr->second.get();
+    config_types::ConfigInterface* t = pair.second.get();
     // Switch statement that serves as a runtime typecheck
-    // See the ConfigInterface.h file for documentation on the ConfigType enum &
-    // the GetType() function
-    switch (itr->second->GetType()) {
+    // See the ConfigInterface.h file for documentation on the ConfigType enum
+    // and the GetType() function
+    switch (pair.second->GetType()) {
       case (1):  // int
       {
         config_types::ConfigInt* temp =
@@ -130,9 +128,9 @@ void LuaRead(std::vector<std::string> files) {
                   << temp->GetVal() << std::endl;
         break;
       }
-      case (0):  // null type: the type value used when a ConfigInterface is
+      default:  // null type: the type value used when a ConfigInterface is
                  // constructed -> should never actually be used
-        std::cout << "This should never happen" << std::endl;
+        std::cerr << "ERROR: ConfigType enum has a value of null, this should never happen!" << std::endl;
         break;
     }
   }
@@ -225,49 +223,80 @@ void HelpText() {
   std::cout << "Usage: ./reader filename.lua" << std::endl;
 }
 
-void InitDaemon(std::vector<std::string> files) {
-  int length, wd, fd, i = 0;
+void InitDaemon(const std::vector<std::string>& files) {
+  int length = 0;
   char buffer[EVENT_BUF_LEN];
 
   // Initialize inotify
-  fd = inotify_init();
+  int fd = inotify_init();
   if (fd < 0) {
-    std::cout << "ERROR: Couldn't initialize inotify" << std::endl;
+    std::cerr << "ERROR: Couldn't initialize inotify" << std::endl;
   }
 
   // Load in the files for the first time
   LuaRead(files);
 
   // Add all the files to be watched
-  for (std::string f : files) {
+  int wd = 0;
+  for (const std::string& f : files) {
     // LuaRead(f);
     wd = inotify_add_watch(fd, f.c_str(), IN_MODIFY);
     if (wd == -1)
-      std::cout << "ERROR: Couldn't add watch to the file: " << f << std::endl;
+      std::cerr << "ERROR: Couldn't add watch to the file: " << f << std::endl;
   }
 
-  // Loop forever, checking for changes to the files above
-  while (1) {
-    i = 0;
-    length = read(fd, buffer, EVENT_BUF_LEN);
-    if (length < 0) std::cout << "ERROR: Inotify read failed" << std::endl;
+  int nr_events, epfd;
 
-    while (i < length) {
-      struct inotify_event* event = (struct inotify_event*)&buffer[i];
-      if (event->mask & IN_MODIFY) {  // If the event was a modify event
-        LuaRead(files);               // Reload all the files
+  epfd = epoll_create(1);
+  if (epfd < 0) {
+    std::cerr << "ERROR: Call to epoll_create failed." << std::endl;
+  }
+
+  epoll_event ready_to_read = {0};
+  ready_to_read.data.fd = fd;
+  ready_to_read.events = EPOLLIN;
+  if (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ready_to_read)) {
+    std::cerr << "ERROR: Call to epoll_ctl failed." << std::endl;
+  }
+
+  epoll_event epoll_events;
+  // Loop forever, checking for changes to the files above
+  while (is_running_) {
+    // Wait for 50 ms for there to be an available inotify event
+    nr_events = epoll_wait(epfd, &epoll_events, 1, 50);
+
+    if (nr_events < 0) {
+      // If the call to epoll_wait failed
+      std::cerr << "ERROR: Call to epoll_wait failed." << std::endl;
+    } else if (nr_events > 0) {
+      // Else if the inotify fd has recieved something that can be read
+      length = read(fd, buffer, EVENT_BUF_LEN);
+      if (length < 0) std::cerr << "ERROR: Inotify read failed" << std::endl;
+
+      for (int i = 0; i < length;) {
+        inotify_event* event = reinterpret_cast<inotify_event*>(&buffer[i]);
+        if (event->mask & IN_MODIFY) {  // If the event was a modify event
+          LuaRead(files);               // Reload all the files
+        }
+        i += EVENT_SIZE + event->len;
       }
-      i += EVENT_SIZE + event->len;
     }
   }
   // Clean up
   inotify_rm_watch(fd, wd);
+  close(epfd);
   close(fd);
 }
 
-void CreateDaemon(std::vector<std::string> files) {
-  std::thread daemon(InitDaemon, files);
-  if (daemon.joinable()) daemon.detach();
+void CreateDaemon(const std::vector<std::string>& files) {
+  LuaRead(files);
+  is_running_ = true;
+  daemon_ = std::thread(InitDaemon, files);
+}
+
+void Stop() {
+  is_running_ = false;
+  if (daemon_.joinable()) daemon_.join();
 }
 
 // CFG_VECTOR3D(test, "tree.testVec");

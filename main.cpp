@@ -43,5 +43,6 @@ int main(int argc, char* argv[]){
   std::cout<<configuration_reader::CONFIG_test<<std::endl;
   std::cout<<configuration_reader::CONFIG_someInt<<std::endl;
 
+  configuration_reader::Stop();
   return 0;
 }

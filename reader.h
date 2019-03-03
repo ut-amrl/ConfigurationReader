@@ -18,10 +18,21 @@
 
 #ifndef READER_H_
 #define READER_H_
+
+extern "C" {
+#include <sys/epoll.h>
+#include <sys/inotify.h>
+#include <unistd.h>
+}
+
+#include <atomic>
 #include <fstream>
 #include <memory>
+#include <string>
 #include <thread>
 #include <unordered_map>
+#include <vector>
+
 #include "config_double.h"
 #include "config_float.h"
 #include "config_int.h"
@@ -32,11 +43,6 @@
 #include "config_bool.h"
 #include "config_vector2d.h"
 #include "config_vector3d.h"
-
-extern "C" {
-#include <sys/inotify.h>
-#include <unistd.h>
-}
 
 namespace configuration_reader {
 // Define constants
@@ -69,8 +75,9 @@ const Eigen::Vector2f& InitVector2f(std::string key);
 const Eigen::Vector2d& InitVector2d(std::string key);
 const Eigen::Vector3d& InitVector3d(std::string key);
 void HelpText();
-void InitDaemon(std::vector<std::string> files);
-void CreateDaemon(std::vector<std::string> files);
+void InitDaemon(const std::vector<std::string>& files);
+void CreateDaemon(const std::vector<std::string>& files);
+void Stop();
 
 // extern const Eigen::Vector3d& CONFIG_test;
 // extern const int& CONFIG_someInt;
