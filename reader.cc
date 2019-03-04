@@ -27,7 +27,7 @@ std::atomic_bool is_running_;
 std::thread daemon_;
 
 namespace {
-std::unordered_map<std::string, std::unique_ptr<config_types::ConfigInterface>>
+std::unordered_map<std::string, std::unique_ptr<config_types::ConfigInterface>>*
     config;
 }  // namespace
 
@@ -40,7 +40,7 @@ void LuaRead(std::vector<std::string> files) {
   // Create the LuaScript object
   LuaScript script(files);
   // Loop through the unordered map
-  for (const auto& pair : config) {
+  for (const auto& pair : *config) {
     // Create a temporary pointer because you can't static_cast a unique_ptr
     config_types::ConfigInterface* t = pair.second.get();
     // Switch statement that serves as a runtime typecheck
@@ -137,77 +137,77 @@ void LuaRead(std::vector<std::string> files) {
 }
 
 const int& InitInt(std::string key) {
-  config[key] = std::unique_ptr<config_types::ConfigInterface>(
+  (*config)[key] = std::unique_ptr<config_types::ConfigInterface>(
       new config_types::ConfigInt(key));
-  config_types::ConfigInterface* t = config.find(key)->second.get();
+  config_types::ConfigInterface* t = config->find(key)->second.get();
   config_types::ConfigInt* temp = static_cast<config_types::ConfigInt*>(t);
   return temp->GetVal();
 }
 
 const unsigned int& InitUnsignedInt(std::string key) {
-  config[key] = std::unique_ptr<config_types::ConfigInterface>(
+  (*config)[key] = std::unique_ptr<config_types::ConfigInterface>(
       new config_types::ConfigUint(key));
-  config_types::ConfigInterface* t = config.find(key)->second.get();
+  config_types::ConfigInterface* t = config->find(key)->second.get();
   config_types::ConfigUint* temp = static_cast<config_types::ConfigUint*>(t);
   return temp->GetVal();
 }
 
 const double& InitDouble(std::string key) {
-  config[key] = std::unique_ptr<config_types::ConfigInterface>(
+  (*config)[key] = std::unique_ptr<config_types::ConfigInterface>(
       new config_types::ConfigDouble(key));
-  config_types::ConfigInterface* t = config.find(key)->second.get();
+  config_types::ConfigInterface* t = config->find(key)->second.get();
   config_types::ConfigDouble* temp =
       static_cast<config_types::ConfigDouble*>(t);
   return temp->GetVal();
 }
 
 const float& InitFloat(std::string key) {
-  config[key] = std::unique_ptr<config_types::ConfigInterface>(
+  (*config)[key] = std::unique_ptr<config_types::ConfigInterface>(
       new config_types::ConfigFloat(key));
-  config_types::ConfigInterface* t = config.find(key)->second.get();
+  config_types::ConfigInterface* t = config->find(key)->second.get();
   config_types::ConfigFloat* temp = static_cast<config_types::ConfigFloat*>(t);
   return temp->GetVal();
 }
 
 const std::string& InitString(std::string key) {
-  config[key] = std::unique_ptr<config_types::ConfigInterface>(
+  (*config)[key] = std::unique_ptr<config_types::ConfigInterface>(
       new config_types::ConfigString(key));
-  config_types::ConfigInterface* t = config.find(key)->second.get();
+  config_types::ConfigInterface* t = config->find(key)->second.get();
   config_types::ConfigString* temp =
       static_cast<config_types::ConfigString*>(t);
   return temp->GetVal();
 }
 
 const Eigen::Vector2f& InitVector2f(std::string key) {
-  config[key] = std::unique_ptr<config_types::ConfigInterface>(
+  (*config)[key] = std::unique_ptr<config_types::ConfigInterface>(
       new config_types::ConfigVector2f(key));
-  config_types::ConfigInterface* t = config.find(key)->second.get();
+  config_types::ConfigInterface* t = config->find(key)->second.get();
   config_types::ConfigVector2f* temp =
       static_cast<config_types::ConfigVector2f*>(t);
   return temp->GetVal();
 }
 
 const bool& InitBool(std::string key) {
-  config[key] = std::unique_ptr<config_types::ConfigInterface>(
+  (*config)[key] = std::unique_ptr<config_types::ConfigInterface>(
       new config_types::ConfigBool(key));
-  config_types::ConfigInterface* t = config.find(key)->second.get();
+  config_types::ConfigInterface* t = config->find(key)->second.get();
   config_types::ConfigBool* temp = static_cast<config_types::ConfigBool*>(t);
   return temp->GetVal();
 }
 
 const Eigen::Vector2d& InitVector2d(std::string key) {
-  config[key] = std::unique_ptr<config_types::ConfigInterface>(
+  (*config)[key] = std::unique_ptr<config_types::ConfigInterface>(
       new config_types::ConfigVector2d(key));
-  config_types::ConfigInterface* t = config.find(key)->second.get();
+  config_types::ConfigInterface* t = config->find(key)->second.get();
   config_types::ConfigVector2d* temp =
       static_cast<config_types::ConfigVector2d*>(t);
   return temp->GetVal();
 }
 
 const Eigen::Vector3d& InitVector3d(std::string key) {
-  config[key] = std::unique_ptr<config_types::ConfigInterface>(
+  (*config)[key] = std::unique_ptr<config_types::ConfigInterface>(
       new config_types::ConfigVector3d(key));
-  config_types::ConfigInterface* t = config.find(key)->second.get();
+  config_types::ConfigInterface* t = config->find(key)->second.get();
   config_types::ConfigVector3d* temp =
       static_cast<config_types::ConfigVector3d*>(t);
   return temp->GetVal();

@@ -36,7 +36,7 @@ DEPEXT      := d
 OBJEXT      := o
 
 #Flags, Libraries and Includes
-CFLAGS      := -std=c++11
+CFLAGS      := -std=c++11 -fsanitize=thread -g
 LIB         := -llua -ldl -lpthread
 INC         := -I$(INCDIR) -I/usr/local/include
 INCDEP      := -I$(INCDIR)
@@ -80,7 +80,7 @@ cleaner: clean
 
 #Link
 $(TARGET): $(OBJECTS)
-	$(CC) -o $(TARGETDIR)/$(TARGET) $^ obj/main.o $(LIB)
+	$(CC) $(CFLAGS) -o $(TARGETDIR)/$(TARGET) $^ obj/main.o $(LIB)
 
 #Compile
 $(BUILDDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
