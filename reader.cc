@@ -237,7 +237,7 @@ void InitDaemon(const std::vector<std::string>& files) {
   }
 
   // Load in the files for the first time
-  LuaRead(files);
+  // LuaRead(files);
 
   // Add all the files to be watched
   for (const std::string& f : files) {
