@@ -1,6 +1,8 @@
 #include "reader.h"
 
 namespace configuration_reader{
-extern const Eigen::Vector3d& CONFIG_test;
-extern const int& CONFIG_someInt;
+
+// CONFIG_VECTOR3D(test, "tree.testVec");
+CONFIG_INT(someInt, "testInt");
+
 }

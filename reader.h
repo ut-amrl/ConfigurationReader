@@ -49,38 +49,35 @@ namespace configuration_reader {
 const std::string kDefaultFileName = "config.lua";
 
 // Define macros for creating new config vars
-#define CFG_INT(name, key) const int& CONFIG_##name = InitInt(key)
-#define CFG_UINT(name, key) \
-  const unsigned int& CONFIG_##name = InitUnsignedInt(key)
-#define CFG_DOUBLE(name, key) const double& CONFIG_##name = InitDouble(key)
-#define CFG_FLOAT(name, key) const float& CONFIG_##name = InitFloat(key)
-#define CFG_STRING(name, key) const std::string& CONFIG_##name = InitString(key)
-#define CFG_VECTOR2F(name, key) \
+#define CONFIG_INT(name, key) const int& CFG_##name = InitInt(key)
+#define CONFIG_UINT(name, key) \
+  const unsigned int& CFG_##name = InitUnsignedInt(key)
+#define CONFIG_DOUBLE(name, key) const double& CFG_##name = InitDouble(key)
+#define CONFIG_FLOAT(name, key) const float& CFG_##name = InitFloat(key)
+#define CONFIG_STRING(name, key) const std::string& CFG_##name = InitString(key)
+#define CONFIG_VECTOR2F(name, key) \
   \
-const Eigen::Vector2f& CONFIG_##name = InitVector2f(key)
-#define CFG_BOOL(name, key) \
-  const bool& CONFIG_##name = InitBool(key)
+const Eigen::Vector2f& CFG_##name = InitVector2f(key)
+#define CONFIG_BOOL(name, key) \
+  const bool& CFG_##name = InitBool(key)
 
-#define CFG_VECTOR2D(name, key) const Eigen::Vector2d& CONFIG_##name = InitVector2d(key)
-#define CFG_VECTOR3D(name, key) const Eigen::Vector3d& CONFIG_##name = InitVector3d(key)
+#define CONFIG_VECTOR2D(name, key) const Eigen::Vector2d& CFG_##name = InitVector2d(key)
+#define CONFIG_VECTOR3D(name, key) const Eigen::Vector3d& CFG_##name = InitVector3d(key)
 
 void LuaRead(std::vector<std::string> files);
-const int& InitInt(std::string key);
-const unsigned int& InitUnsignedInt(std::string key);
-const double& InitDouble(std::string key);
-const float& InitFloat(std::string key);
-const std::string& InitString(std::string key);
-const bool& InitBool(std::string key);
-const Eigen::Vector2f& InitVector2f(std::string key);
-const Eigen::Vector2d& InitVector2d(std::string key);
-const Eigen::Vector3d& InitVector3d(std::string key);
+const int& InitInt(const std::string& key);
+const unsigned int& InitUnsignedInt(const std::string& key);
+const double& InitDouble(const std::string& key);
+const float& InitFloat(const std::string& key);
+const std::string& InitString(const std::string& key);
+const bool& InitBool(const std::string& key);
+const Eigen::Vector2f& InitVector2f(const std::string& key);
+const Eigen::Vector2d& InitVector2d(const std::string& key);
+const Eigen::Vector3d& InitVector3d(const std::string& key);
 void HelpText();
 void InitDaemon(const std::vector<std::string>& files);
 void CreateDaemon(const std::vector<std::string>& files);
 void Stop();
-
-// extern const Eigen::Vector3d& CONFIG_test;
-// extern const int& CONFIG_someInt;
 
 }  // namespace configuration_reader
 #endif

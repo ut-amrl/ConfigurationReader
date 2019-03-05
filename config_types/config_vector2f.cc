@@ -21,7 +21,7 @@ namespace configuration_reader {
 namespace config_types {
 ConfigVector2f::ConfigVector2f(std::string key_name) {
   key_ = key_name;
-  type_ = ConfigInterface::cvector2f;
+  type_= cvector2f;
 }
 
 const Eigen::Vector2f& ConfigVector2f::GetVal() {

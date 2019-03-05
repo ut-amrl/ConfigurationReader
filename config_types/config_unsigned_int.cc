@@ -24,7 +24,7 @@ ConfigUint::ConfigUint(std::string key_name) {
   val_ = 0;
   upper_bound_ = 0;
   lower_bound_ = 0;
-  type_ = ConfigInterface::cuint;
+  type_= cuint;
 }
 
 ConfigUint::ConfigUint(std::string key_name, unsigned int upper_bound,
@@ -33,7 +33,7 @@ ConfigUint::ConfigUint(std::string key_name, unsigned int upper_bound,
   val_ = 0;
   upper_bound_ = upper_bound;
   lower_bound_ = lower_bound;
-  type_ = ConfigInterface::cuint;
+  type_= cuint;
 }
 
 const unsigned int& ConfigUint::GetVal() {

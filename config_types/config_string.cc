@@ -22,7 +22,7 @@ namespace config_types {
 ConfigString::ConfigString(std::string key_name) {
   key_ = key_name;
   val_ = "";
-  type_ = ConfigInterface::cstring;
+  type_= cstring;
 }
 
 const std::string& ConfigString::GetVal() {

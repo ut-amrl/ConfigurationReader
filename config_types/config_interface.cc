@@ -21,6 +21,6 @@ namespace configuration_reader {
 namespace config_types {
 
 std::string ConfigInterface::GetKey() { return key_; }
-ConfigInterface::ConfigType ConfigInterface::GetType() { return type_; }
+ConfigType ConfigInterface::GetType() { return type_; }
 }  // namespace config_types
 }  // namespace configuration_reader

@@ -25,9 +25,10 @@
 namespace configuration_reader {
 namespace config_types {
 
+enum ConfigType { cnull, cint, cuint, cdouble, cfloat, cstring, cvector2f, cbool, cvector2d, cvector3d };
+
 class ConfigInterface {
  public:
-  enum ConfigType { cnull, cint, cuint, cdouble, cfloat, cstring, cvector2f, cbool, cvector2d, cvector3d };
   std::string GetKey();
   virtual ConfigType GetType();
 

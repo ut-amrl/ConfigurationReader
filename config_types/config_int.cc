@@ -24,7 +24,7 @@ ConfigInt::ConfigInt(std::string key_name) {
   val_ = 0;
   upper_bound_ = 0;
   lower_bound_ = 0;
-  type_ = ConfigInterface::cint;
+  type_= cint;
 }
 
 ConfigInt::ConfigInt(std::string key_name, int upper_bound, int lower_bound) {
@@ -32,7 +32,7 @@ ConfigInt::ConfigInt(std::string key_name, int upper_bound, int lower_bound) {
   val_ = 0;
   upper_bound_ = upper_bound;
   lower_bound_ = lower_bound;
-  type_ = ConfigInterface::cint;
+  type_= cint;
 }
 
 const int& ConfigInt::GetVal() {

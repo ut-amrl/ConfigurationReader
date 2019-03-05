@@ -17,16 +17,25 @@
 // ========================================================================
 
 // Sample main
-#include <chrono> // For testing purposes only
-#include "reader.h"
+#include <signal.h> // For testing only
+#include <chrono> // For testing only
 #include "my_vars.h"
 
-namespace configuration_reader{
-CFG_VECTOR3D(test, "tree.testVec");
-CFG_INT(someInt, "testInt2");
+std::atomic_bool should_shutdown(false);
+
+void SigHandler(int signo) {
+  if (signo == SIGINT) {
+    std::cout << "Shutting down!\n";
+    should_shutdown = true;
+  }
 }
 
 int main(int argc, char* argv[]){
+  if (signal(SIGINT, SigHandler) == SIG_ERR) {
+    std::cout << "Cannot trap SigHandler!\n";
+    exit(0);
+  }
+
   std::vector<std::string> files;
   if (argc == 2) {
     std::string t = argv[1];
@@ -44,10 +53,15 @@ int main(int argc, char* argv[]){
   }
 
   configuration_reader::CreateDaemon(files);
-  sleep(5);
-  std::cout<<configuration_reader::CONFIG_test<<std::endl;
-  std::cout<<configuration_reader::CONFIG_someInt<<std::endl;
+
+  while(!should_shutdown){
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    // std::cout<<configuration_reader::CFG_test<<std::endl;
+    std::cout<<configuration_reader::CFG_someInt<<std::endl;
+  }
 
   configuration_reader::Stop();
+  std::cout<<"Shut Down"<<std::endl;
+
   return 0;
 }

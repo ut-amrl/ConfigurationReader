@@ -36,8 +36,8 @@ DEPEXT      := d
 OBJEXT      := o
 
 #Flags, Libraries and Includes
-CFLAGS      := -std=c++11 -fsanitize=thread -g
-LIB         := -llua -ldl -lpthread
+CFLAGS      := -std=c++11
+LIB         := -llua -ldl -latomic -lpthread
 INC         := -I$(INCDIR) -I/usr/local/include
 INCDEP      := -I$(INCDIR)
 
