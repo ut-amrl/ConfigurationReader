@@ -282,7 +282,6 @@ void InitDaemon(const std::vector<std::string>& files) {
     if (nr_events < 0) {
       // If the call to epoll_wait failed
       std::cerr << "ERROR: Call to epoll_wait failed." << std::endl;
-      exit(-1);
     }
     if (nr_events > 0) {
       // Else if the inotify fd has recieved something that can be read
