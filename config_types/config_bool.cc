@@ -23,12 +23,10 @@ namespace config_types {
 ConfigBool::ConfigBool(std::string key_name) {
   key_ = key_name;
   val_ = false;
-  type_= cbool;
+  type_ = cbool;
 }
 
-const bool& ConfigBool::GetVal() {
-  return val_;
-}
+const bool& ConfigBool::GetVal() { return val_; }
 
 bool ConfigBool::SetVal(LuaScript* script) {
   val_ = script->get<bool>(key_);

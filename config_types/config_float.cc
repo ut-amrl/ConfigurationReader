@@ -24,7 +24,7 @@ ConfigFloat::ConfigFloat(std::string key_name) {
   val_ = 0;
   upper_bound_ = 0;
   lower_bound_ = 0;
-  type_= cfloat;
+  type_ = cfloat;
 }
 
 ConfigFloat::ConfigFloat(std::string key_name, float upper_bound,
@@ -33,7 +33,7 @@ ConfigFloat::ConfigFloat(std::string key_name, float upper_bound,
   val_ = 0;
   upper_bound_ = upper_bound;
   lower_bound_ = lower_bound;
-  type_= cfloat;
+  type_ = cfloat;
 }
 
 const float& ConfigFloat::GetVal() {

@@ -22,7 +22,7 @@ namespace config_types {
 ConfigString::ConfigString(std::string key_name) {
   key_ = key_name;
   val_ = "";
-  type_= cstring;
+  type_ = cstring;
 }
 
 const std::string& ConfigString::GetVal() {
@@ -34,5 +34,5 @@ bool ConfigString::SetVal(LuaScript* script) {
   val_ = script->get<std::string>(key_);
   return true;
 }
-}  // namsespace config_types
+}  // namespace config_types
 }  // namespace configuration_reader

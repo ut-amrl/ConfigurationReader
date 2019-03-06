@@ -25,7 +25,18 @@
 namespace configuration_reader {
 namespace config_types {
 
-enum ConfigType { cnull, cint, cuint, cdouble, cfloat, cstring, cvector2f, cbool, cvector2d, cvector3d };
+enum ConfigType {
+  cnull,
+  cint,
+  cuint,
+  cdouble,
+  cfloat,
+  cstring,
+  cvector2f,
+  cbool,
+  cvector2d,
+  cvector3d
+};
 
 class ConfigInterface {
  public:
