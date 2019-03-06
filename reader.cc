@@ -20,11 +20,17 @@
 namespace configuration_reader {
 
 class MapSingleton {
-public:
-   static std::unordered_map<std::string, std::unique_ptr<config_types::ConfigInterface>>& singleton() {
-      static std::unordered_map<std::string, std::unique_ptr<config_types::ConfigInterface>> config;
-      return config;
-   }
+ public:
+  static std::unordered_map<std::string,
+                            std::unique_ptr<config_types::ConfigInterface>>&
+  singleton() {
+    // Needs large number of buckets because references are not stable across
+    // map growths.
+    static std::unordered_map<std::string,
+                              std::unique_ptr<config_types::ConfigInterface>>
+        config(1000000);
+    return config;
+  }
 };
 
 // Define constants
@@ -38,7 +44,8 @@ std::atomic_bool is_running_;
 std::thread daemon_;
 
 // namespace {
-// std::unordered_map<std::string, std::unique_ptr<config_types::ConfigInterface>>
+// std::unordered_map<std::string,
+// std::unique_ptr<config_types::ConfigInterface>>
 //     config;
 // }  // namespace
 
@@ -58,8 +65,7 @@ void LuaRead(std::vector<std::string> files) {
     // See the ConfigInterface.h file for documentation on the ConfigType enum
     // and the GetType() function
     switch (pair.second->GetType()) {
-      case (config_types::cint):
-      {
+      case (config_types::cint): {
         config_types::ConfigInt* temp =
             static_cast<config_types::ConfigInt*>(t);
         temp->SetVal(&script);
@@ -67,8 +73,7 @@ void LuaRead(std::vector<std::string> files) {
                   << std::endl;
         break;
       }
-      case (config_types::cuint):
-      {
+      case (config_types::cuint): {
         config_types::ConfigUint* temp =
             static_cast<config_types::ConfigUint*>(t);
         temp->SetVal(&script);
@@ -76,8 +81,7 @@ void LuaRead(std::vector<std::string> files) {
                   << std::endl;
         break;
       }
-      case (config_types::cdouble):
-      {
+      case (config_types::cdouble): {
         config_types::ConfigDouble* temp =
             static_cast<config_types::ConfigDouble*>(t);
         temp->SetVal(&script);
@@ -85,8 +89,7 @@ void LuaRead(std::vector<std::string> files) {
                   << std::endl;
         break;
       }
-      case (config_types::cfloat):
-      {
+      case (config_types::cfloat): {
         config_types::ConfigFloat* temp =
             static_cast<config_types::ConfigFloat*>(t);
         temp->SetVal(&script);
@@ -94,8 +97,7 @@ void LuaRead(std::vector<std::string> files) {
                   << std::endl;
         break;
       }
-      case (config_types::cstring):
-      {
+      case (config_types::cstring): {
         config_types::ConfigString* temp =
             static_cast<config_types::ConfigString*>(t);
         temp->SetVal(&script);
@@ -103,8 +105,7 @@ void LuaRead(std::vector<std::string> files) {
                   << std::endl;
         break;
       }
-      case (config_types::cvector2f):
-      {
+      case (config_types::cvector2f): {
         config_types::ConfigVector2f* temp =
             static_cast<config_types::ConfigVector2f*>(t);
         temp->SetVal(&script);
@@ -112,8 +113,7 @@ void LuaRead(std::vector<std::string> files) {
                   << temp->GetVal() << std::endl;
         break;
       }
-      case (config_types::cbool):
-      {
+      case (config_types::cbool): {
         config_types::ConfigBool* temp =
             static_cast<config_types::ConfigBool*>(t);
         temp->SetVal(&script);
@@ -121,8 +121,7 @@ void LuaRead(std::vector<std::string> files) {
                   << temp->GetVal() << std::endl;
         break;
       }
-      case (config_types::cvector2d):
-      {
+      case (config_types::cvector2d): {
         config_types::ConfigVector2d* temp =
             static_cast<config_types::ConfigVector2d*>(t);
         temp->SetVal(&script);
@@ -130,8 +129,7 @@ void LuaRead(std::vector<std::string> files) {
                   << temp->GetVal() << std::endl;
         break;
       }
-      case (config_types::cvector3d):
-      {
+      case (config_types::cvector3d): {
         config_types::ConfigVector3d* temp =
             static_cast<config_types::ConfigVector3d*>(t);
         temp->SetVal(&script);
@@ -140,85 +138,105 @@ void LuaRead(std::vector<std::string> files) {
         break;
       }
       default:  // null type: the type value used when a ConfigInterface is
-                 // constructed -> should never actually be used
-        std::cerr << "ERROR: ConfigType enum has a value of null, this should never happen!" << std::endl;
+                // constructed -> should never actually be used
+        std::cerr << "ERROR: ConfigType enum has a value of null, this should "
+                     "never happen!"
+                  << std::endl;
         break;
     }
   }
 }
 
 const int& InitInt(const std::string& key) {
-  MapSingleton::singleton()[key] = std::unique_ptr<config_types::ConfigInterface>(
-      new config_types::ConfigInt(key));
-  config_types::ConfigInterface* t = MapSingleton::singleton().find(key)->second.get();
+  MapSingleton::singleton()[key] =
+      std::unique_ptr<config_types::ConfigInterface>(
+          new config_types::ConfigInt(key));
+  config_types::ConfigInterface* t =
+      MapSingleton::singleton().find(key)->second.get();
   config_types::ConfigInt* temp = static_cast<config_types::ConfigInt*>(t);
   return temp->GetVal();
 }
 
 const unsigned int& InitUnsignedInt(const std::string& key) {
-  MapSingleton::singleton()[key] = std::unique_ptr<config_types::ConfigInterface>(
-      new config_types::ConfigUint(key));
-  config_types::ConfigInterface* t = MapSingleton::singleton().find(key)->second.get();
+  MapSingleton::singleton()[key] =
+      std::unique_ptr<config_types::ConfigInterface>(
+          new config_types::ConfigUint(key));
+  config_types::ConfigInterface* t =
+      MapSingleton::singleton().find(key)->second.get();
   config_types::ConfigUint* temp = static_cast<config_types::ConfigUint*>(t);
   return temp->GetVal();
 }
 
 const double& InitDouble(const std::string& key) {
-  MapSingleton::singleton()[key] = std::unique_ptr<config_types::ConfigInterface>(
-      new config_types::ConfigDouble(key));
-  config_types::ConfigInterface* t = MapSingleton::singleton().find(key)->second.get();
+  MapSingleton::singleton()[key] =
+      std::unique_ptr<config_types::ConfigInterface>(
+          new config_types::ConfigDouble(key));
+  config_types::ConfigInterface* t =
+      MapSingleton::singleton().find(key)->second.get();
   config_types::ConfigDouble* temp =
       static_cast<config_types::ConfigDouble*>(t);
   return temp->GetVal();
 }
 
 const float& InitFloat(const std::string& key) {
-  MapSingleton::singleton()[key] = std::unique_ptr<config_types::ConfigInterface>(
-      new config_types::ConfigFloat(key));
-  config_types::ConfigInterface* t = MapSingleton::singleton().find(key)->second.get();
+  MapSingleton::singleton()[key] =
+      std::unique_ptr<config_types::ConfigInterface>(
+          new config_types::ConfigFloat(key));
+  config_types::ConfigInterface* t =
+      MapSingleton::singleton().find(key)->second.get();
   config_types::ConfigFloat* temp = static_cast<config_types::ConfigFloat*>(t);
   return temp->GetVal();
 }
 
 const std::string& InitString(const std::string& key) {
-  MapSingleton::singleton()[key] = std::unique_ptr<config_types::ConfigInterface>(
-      new config_types::ConfigString(key));
-  config_types::ConfigInterface* t = MapSingleton::singleton().find(key)->second.get();
+  MapSingleton::singleton()[key] =
+      std::unique_ptr<config_types::ConfigInterface>(
+          new config_types::ConfigString(key));
+  config_types::ConfigInterface* t =
+      MapSingleton::singleton().find(key)->second.get();
   config_types::ConfigString* temp =
       static_cast<config_types::ConfigString*>(t);
   return temp->GetVal();
 }
 
 const Eigen::Vector2f& InitVector2f(const std::string& key) {
-  MapSingleton::singleton()[key] = std::unique_ptr<config_types::ConfigInterface>(
-      new config_types::ConfigVector2f(key));
-  config_types::ConfigInterface* t = MapSingleton::singleton().find(key)->second.get();
+  MapSingleton::singleton()[key] =
+      std::unique_ptr<config_types::ConfigInterface>(
+          new config_types::ConfigVector2f(key));
+  config_types::ConfigInterface* t =
+      MapSingleton::singleton().find(key)->second.get();
   config_types::ConfigVector2f* temp =
       static_cast<config_types::ConfigVector2f*>(t);
   return temp->GetVal();
 }
 
 const bool& InitBool(const std::string& key) {
-  MapSingleton::singleton()[key] = std::unique_ptr<config_types::ConfigInterface>(
-      new config_types::ConfigBool(key));
-  config_types::ConfigInterface* t = MapSingleton::singleton().find(key)->second.get();
+  MapSingleton::singleton()[key] =
+      std::unique_ptr<config_types::ConfigInterface>(
+          new config_types::ConfigBool(key));
+  config_types::ConfigInterface* t =
+      MapSingleton::singleton().find(key)->second.get();
   config_types::ConfigBool* temp = static_cast<config_types::ConfigBool*>(t);
   return temp->GetVal();
 }
 
 const Eigen::Vector2d& InitVector2d(const std::string& key) {
-  MapSingleton::singleton()[key] = std::unique_ptr<config_types::ConfigInterface>(
-      new config_types::ConfigVector2d(key));
-  config_types::ConfigInterface* t = MapSingleton::singleton().find(key)->second.get();
+  MapSingleton::singleton()[key] =
+      std::unique_ptr<config_types::ConfigInterface>(
+          new config_types::ConfigVector2d(key));
+  config_types::ConfigInterface* t =
+      MapSingleton::singleton().find(key)->second.get();
   config_types::ConfigVector2d* temp =
       static_cast<config_types::ConfigVector2d*>(t);
   return temp->GetVal();
 }
 
 const Eigen::Vector3d& InitVector3d(const std::string& key) {
-  MapSingleton::singleton()[key] = std::unique_ptr<config_types::ConfigInterface>(
-      new config_types::ConfigVector3d(key));
-  config_types::ConfigInterface* t = MapSingleton::singleton().find(key)->second.get();
+  MapSingleton::singleton()[key] =
+      std::unique_ptr<config_types::ConfigInterface>(
+          new config_types::ConfigVector3d(key));
+  config_types::ConfigInterface* t =
+      MapSingleton::singleton().find(key)->second.get();
   config_types::ConfigVector3d* temp =
       static_cast<config_types::ConfigVector3d*>(t);
   return temp->GetVal();
@@ -251,7 +269,7 @@ void InitDaemon(const std::vector<std::string>& files) {
   // Add all the files to be watched
   for (const std::string& f : files) {
     int wd = inotify_add_watch(fd, f.c_str(), IN_MODIFY);
-    if (wd == -1){
+    if (wd == -1) {
       std::cerr << "ERROR: Couldn't add watch to the file: " << f << std::endl;
       exit(-1);
     }
@@ -321,4 +339,4 @@ void Stop() {
   if (daemon_.joinable()) daemon_.join();
 }
 
-}  // namespace Configuration Reader
+}  // namespace configuration_reader

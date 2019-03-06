@@ -63,7 +63,7 @@ std::vector<int> LuaScript::getIntVector(const std::string& name) {
 
 // Wrapper to return an Eigen::Vector2f from Lua
 Eigen::Vector2f LuaScript::getVector2f(const std::string& name) {
-  Eigen::Vector2f v(0,0);
+  Eigen::Vector2f v(0, 0);
   lua_gettostack(name.c_str());
   if (lua_isnil(L, -1)) {  // array is not found
     std::cout << "Vector2f not found in Lua file" << std::endl;
@@ -89,7 +89,7 @@ Eigen::Vector2f LuaScript::getVector2f(const std::string& name) {
 }
 
 Eigen::Vector2d LuaScript::getVector2d(const std::string& name) {
-  Eigen::Vector2d v(0,0);
+  Eigen::Vector2d v(0, 0);
   lua_gettostack(name.c_str());
   if (lua_isnil(L, -1)) {  // array is not found
     std::cout << "Vector2d not found in Lua file" << std::endl;
@@ -115,7 +115,7 @@ Eigen::Vector2d LuaScript::getVector2d(const std::string& name) {
 }
 
 Eigen::Vector3d LuaScript::getVector3d(const std::string& name) {
-  Eigen::Vector3d v(0,0,0);
+  Eigen::Vector3d v(0, 0, 0);
   lua_gettostack(name.c_str());
   if (lua_isnil(L, -1)) {  // array is not found
     std::cout << "Vector3d not found in Lua file" << std::endl;
@@ -129,8 +129,7 @@ Eigen::Vector3d LuaScript::getVector3d(const std::string& name) {
         v(0) = ((double)lua_tonumber(L, -1));
       } else if (strncmp(lua_tostring(L, -2), "y", 1) == 0) {
         v(1) = ((double)lua_tonumber(L, -1));
-      }
-      else{
+      } else {
         v(2) = ((double)lua_tonumber(L, -1));
       }
       lua_pop(L, 1);

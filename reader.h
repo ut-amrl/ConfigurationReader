@@ -33,15 +33,15 @@ extern "C" {
 #include <unordered_map>
 #include <vector>
 
+#include "config_bool.h"
 #include "config_double.h"
 #include "config_float.h"
 #include "config_int.h"
 #include "config_interface.h"
 #include "config_string.h"
 #include "config_unsigned_int.h"
-#include "config_vector2f.h"
-#include "config_bool.h"
 #include "config_vector2d.h"
+#include "config_vector2f.h"
 #include "config_vector3d.h"
 
 namespace configuration_reader {
@@ -56,13 +56,14 @@ const std::string kDefaultFileName = "config.lua";
 #define CONFIG_FLOAT(name, key) const float& CFG_##name = InitFloat(key)
 #define CONFIG_STRING(name, key) const std::string& CFG_##name = InitString(key)
 #define CONFIG_VECTOR2F(name, key) \
-  \
-const Eigen::Vector2f& CFG_##name = InitVector2f(key)
-#define CONFIG_BOOL(name, key) \
-  const bool& CFG_##name = InitBool(key)
+                                   \
+  const Eigen::Vector2f& CFG_##name = InitVector2f(key)
+#define CONFIG_BOOL(name, key) const bool& CFG_##name = InitBool(key)
 
-#define CONFIG_VECTOR2D(name, key) const Eigen::Vector2d& CFG_##name = InitVector2d(key)
-#define CONFIG_VECTOR3D(name, key) const Eigen::Vector3d& CFG_##name = InitVector3d(key)
+#define CONFIG_VECTOR2D(name, key) \
+  const Eigen::Vector2d& CFG_##name = InitVector2d(key)
+#define CONFIG_VECTOR3D(name, key) \
+  const Eigen::Vector3d& CFG_##name = InitVector3d(key)
 
 void LuaRead(std::vector<std::string> files);
 const int& InitInt(const std::string& key);

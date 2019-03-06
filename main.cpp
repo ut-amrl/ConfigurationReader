@@ -17,8 +17,8 @@
 // ========================================================================
 
 // Sample main
-#include <signal.h> // For testing only
-#include <chrono> // For testing only
+#include <signal.h>  // For testing only
+#include <chrono>    // For testing only
 #include "my_vars.h"
 
 std::atomic_bool should_shutdown(false);
@@ -30,7 +30,7 @@ void SigHandler(int signo) {
   }
 }
 
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[]) {
   if (signal(SIGINT, SigHandler) == SIG_ERR) {
     std::cout << "Cannot trap SigHandler!\n";
     exit(0);
@@ -44,8 +44,8 @@ int main(int argc, char* argv[]){
       return 0;
     }
     files.push_back(argv[1]);
-  } else if(argc > 2) {
-    for(int i=1; i<argc; i++){
+  } else if (argc > 2) {
+    for (int i = 1; i < argc; i++) {
       files.push_back(argv[i]);
     }
   } else {
@@ -54,14 +54,14 @@ int main(int argc, char* argv[]){
 
   configuration_reader::CreateDaemon(files);
 
-  while(!should_shutdown){
+  while (!should_shutdown) {
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
     // std::cout<<configuration_reader::CFG_test<<std::endl;
-    std::cout<<configuration_reader::CFG_someInt<<std::endl;
+    std::cout << configuration_reader::CFG_someInt << std::endl;
   }
 
   configuration_reader::Stop();
-  std::cout<<"Shut Down"<<std::endl;
+  std::cout << "Shut Down" << std::endl;
 
   return 0;
 }
