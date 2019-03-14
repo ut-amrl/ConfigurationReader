@@ -266,11 +266,18 @@ void InitDaemon(const std::vector<std::string>& files) {
   // Load in the files for the first time
   // LuaRead(files);
 
-  // Add all the files to be watched
+  // Create list of directories we need to watch
+  std::set<std::string> watch_directories;
   for (const std::string& f : files) {
-    int wd = inotify_add_watch(fd, f.c_str(), IN_MODIFY);
+    watch_directories.insert(dirname(strdup(f.c_str())));
+  }
+
+  // Add all the directories to be watched
+  for (const std::string& dir : watch_directories) {
+    int wd = inotify_add_watch(fd, dir.c_str(), IN_MODIFY);
     if (wd == -1) {
-      std::cerr << "ERROR: Couldn't add watch to the file: " << f << std::endl;
+      std::cerr << "ERROR: Couldn't add watch to the directory: "
+                << dir << std::endl;
       exit(-1);
     }
   }
@@ -308,11 +315,24 @@ void InitDaemon(const std::vector<std::string>& files) {
 
       for (int i = 0; i < length;) {
         inotify_event* event = reinterpret_cast<inotify_event*>(&buffer[i]);
-        if (event->mask & IN_MODIFY) {  // If the event was a modify event
+        i += EVENT_SIZE + event->len;
+
+        // Must be a modify event
+        if (!(event->mask & IN_MODIFY))
+          continue;
+
+        // Length of file path must be positive
+        if (event->len <= 0)
+          continue;
+
+        // Path to modified file
+        std::string name = event->name;
+
+        // If this is indeed in our list of watched files, update
+        if (std::find(files.begin(), files.end(), name) != files.end()) {
           last_notify = std::chrono::system_clock::now();
           needs_update = true;
         }
-        i += EVENT_SIZE + event->len;
       }
     }
     if (needs_update && std::chrono::duration_cast<std::chrono::milliseconds>(
