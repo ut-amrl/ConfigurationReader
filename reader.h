@@ -23,6 +23,7 @@ extern "C" {
 #include <sys/epoll.h>
 #include <sys/inotify.h>
 #include <unistd.h>
+#include <libgen.h>
 }
 
 #include <atomic>
@@ -32,6 +33,8 @@ extern "C" {
 #include <thread>
 #include <unordered_map>
 #include <vector>
+#include <set>
+#include <algorithm>
 
 #include "config_bool.h"
 #include "config_double.h"
