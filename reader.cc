@@ -318,12 +318,14 @@ void InitDaemon(const std::vector<std::string>& files) {
         i += EVENT_SIZE + event->len;
 
         // Must be a modify event
-        if (!(event->mask & IN_MODIFY))
+        if (!(event->mask & IN_MODIFY)) {
           continue;
+        }
 
         // Length of file path must be positive
-        if (event->len <= 0)
+        if (event->len <= 0) {
           continue;
+        }
 
         // Path to modified file
         std::string name = event->name;
