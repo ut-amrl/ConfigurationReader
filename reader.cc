@@ -263,23 +263,26 @@ void InitDaemon(const std::vector<std::string>& files) {
     exit(-1);
   }
 
-  // Load in the files for the first time
-  // LuaRead(files);
+  // Each watch descriptor is associated with a directory that contains a set
+  // of watched files
+  std::unordered_map<int, std::set<std::string>> wd_to_files;
 
-  // Create list of directories we need to watch
-  std::set<std::string> watch_directories;
-  for (const std::string& f : files) {
-    watch_directories.insert(dirname(strdup(f.c_str())));
-  }
+  // Add a listener on each parent directory
+  for (const std::string& filepath : files) {
+    std::string filename = basename(strdup(filepath.c_str()));
+    std::string directory = dirname(strdup(filepath.c_str()));
 
-  // Add all the directories to be watched
-  for (const std::string& dir : watch_directories) {
-    int wd = inotify_add_watch(fd, dir.c_str(), IN_MODIFY);
+    // (Will be duplicate wd if we've already add_watched the directory)
+    int wd = inotify_add_watch(fd, directory.c_str(), IN_MODIFY);
+
     if (wd == -1) {
-      std::cerr << "ERROR: Couldn't add watch to the directory: "
-                << dir << std::endl;
+      std::cerr << "ERROR: Couldn't add watch to the file: "
+                << filepath << std::endl;
       exit(-1);
     }
+
+    // Add to list of watched files
+    wd_to_files[wd].insert(filename);
   }
 
   int epfd = epoll_create(1);
@@ -317,21 +320,13 @@ void InitDaemon(const std::vector<std::string>& files) {
         inotify_event* event = reinterpret_cast<inotify_event*>(&buffer[i]);
         i += EVENT_SIZE + event->len;
 
-        // Must be a modify event
-        if (!(event->mask & IN_MODIFY)) {
-          continue;
-        }
-
-        // Length of file path must be positive
+        // Length of file name must be positive
         if (event->len <= 0) {
           continue;
         }
 
-        // Path to modified file
-        std::string name = event->name;
-
-        // If this is indeed in our list of watched files, update
-        if (std::find(files.begin(), files.end(), name) != files.end()) {
+        // If file is in our list of files to track for this wd, then update
+        if (wd_to_files[event->wd].count(event->name) != 0) {
           last_notify = std::chrono::system_clock::now();
           needs_update = true;
         }
