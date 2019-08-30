@@ -25,9 +25,9 @@
 #include <vector>
 
 extern "C" {
-#include "lauxlib.h"
-#include "lua.h"
-#include "lualib.h"
+#include "lua5.1/lauxlib.h"
+#include "lua5.1/lua.h"
+#include "lua5.1/lualib.h"
 }
 
 class LuaScript {

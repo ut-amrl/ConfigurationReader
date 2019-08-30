@@ -37,7 +37,7 @@ OBJEXT      := o
 
 #Flags, Libraries and Includes
 CFLAGS      := -std=c++11
-LIB         := -llua -ldl -latomic -lpthread
+LIB         := -llua5.1 -ldl -latomic -lpthread
 INC         := -I$(INCDIR) -I/usr/local/include
 INCDEP      := -I$(INCDIR)
 
